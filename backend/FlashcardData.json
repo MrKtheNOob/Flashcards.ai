@@ -1,0 +1,522 @@
+[
+  {
+    "DeckName": "Computer Science",
+    "content": [
+      {
+        "id": 0,
+        "front": "Qu'est-ce qu'un ordinateur?",
+        "back": "Un ensemble de composants électroniques modulaires, capable de faire fonctionner des programmes informatiques."
+      },
+      {
+        "id": 1,
+        "front": "Qu'est-ce que le matériel (hardware)?",
+        "back": "L'aspect physique de l'ordinateur : unité centrale, mémoire, organes d'entrées-sorties."
+      },
+      {
+        "id": 2,
+        "front": "Qu'est-ce que le logiciel (software)?",
+        "back": "Ensemble d'instructions ou programme contenu dans la mémoire, définissant les actions du matériel."
+      },
+      {
+        "id": 3,
+        "front": "Qu'est-ce que la carte mère?",
+        "back": "La carte principale d'un ordinateur qui connecte tous les composants matériels pour un fonctionnement efficace."
+      },
+      {
+        "id": 4,
+        "front": "Facteur de forme d'une carte mère",
+        "back": "La géométrie, les dimensions et l'agencement électrique de la carte mère."
+      },
+      {
+        "id": 5,
+        "front": "Qu'est-ce qu'un chipset?",
+        "back": "Jeu de composants gérant la communication entre le microprocesseur et les périphériques."
+      },
+      {
+        "id": 6,
+        "front": "Rôle du BIOS",
+        "back": "Programme gérant le matériel (clavier, écran, etc.) et servant d'interface entre le matériel et le système d'exploitation."
+      },
+      {
+        "id": 7,
+        "front": "Qu'est-ce qu'un processeur (CPU)?",
+        "back": "Le 'cerveau' de l'ordinateur, manipulant les données et exécutant les instructions stockées en mémoire."
+      },
+      {
+        "id": 8,
+        "front": "Unité arithmétique et logique (UAL)",
+        "back": "Effectue les calculs et opérations logiques dans le processeur."
+      },
+      {
+        "id": 9,
+        "front": "Fonction d'un bus dans un ordinateur",
+        "back": "Assure la transmission des informations binaires entre les éléments de l'ordinateur."
+      },
+      {
+        "id": 10,
+        "front": "Qu'est-ce qu'un ordinateur ?",
+        "back": "Un ordinateur est un ensemble de composants électroniques modulaires capables de faire fonctionner des programmes informatiques."
+      },
+      {
+        "id": 11,
+        "front": "Quels sont les deux modes de réalisation d’un ordinateur ?",
+        "back": "1. Le matériel (hardware) : aspect physique de l’ordinateur. 2. Le logiciel (software) : ensemble d’instructions exécutées par le matériel."
+      },
+      {
+        "id": 12,
+        "front": "Comment appelle-t-on la carte principale d’un ordinateur ?",
+        "back": "La carte principale d’un ordinateur est appelée carte mère (en anglais Mainboard ou Motherboard)."
+      },
+      {
+        "id": 13,
+        "front": "Quelles sont les fonctions principales de la carte mère ?",
+        "back": "Elle assemble et met en relation les composants matériels, assurant leur fonctionnement efficace grâce à différents bus (adresses, données, commandes)."
+      },
+      {
+        "id": 14,
+        "front": "Quels sont les formats de cartes mères courants ?",
+        "back": "ATX (1995), BTX (2005), ITX (2009) sont des exemples de formats de cartes mères."
+      },
+      {
+        "id": 15,
+        "front": "Qu’est-ce qu’un chipset sur une carte mère ?",
+        "back": "C’est une interface constituée de plusieurs composants qui gèrent la communication entre le microprocesseur et les périphériques."
+      },
+      {
+        "id": 16,
+        "front": "Qu’est-ce que le BIOS ?",
+        "back": "Le BIOS (Basic Input Output Service) est un programme qui gère le matériel de l’ordinateur et agit comme une interface entre le système d’exploitation et le matériel."
+      },
+      {
+        "id": 17,
+        "front": "Quelle est la différence entre un socket et un slot ?",
+        "back": "Un socket est un connecteur pour processeurs, tandis qu’un slot est une fente rectangulaire pour insérer des composants comme la mémoire ou des cartes d'extension."
+      },
+      {
+        "id": 18,
+        "front": "À quoi servent les connecteurs internes d’une carte mère ?",
+        "back": "Les connecteurs internes permettent de connecter des cartes d’extension (PCI, AGP) et des périphériques de stockage (IDE, SATA)."
+      },
+      {
+        "id": 19,
+        "front": "Quelle est la fonction principale d’un processeur (CPU) ?",
+        "back": "Le processeur permet les échanges de données entre les composants et exécute les instructions stockées en mémoire."
+      },
+      {
+        "id": 20,
+        "front": "Quelle est l'Organisation de libération de la Palestine (OLP) ?",
+        "back": "Organisation créée en 1964, dirigée par Yasser Arafat à partir de 1969, représentant les intérêts palestiniens."
+      },
+      {
+        "id": 21,
+        "front": "Quelles sont les causes de la seconde Intifada (2000) ?",
+        "back": "Visite d'Ariel Sharon sur l'Esplanade des Mosquées, blocages des négociations de paix sur des points clés (réfugiés, frontières, Jérusalem)."
+      },
+      {
+        "id": 23,
+        "front": "Quand dit-on qu'une fonction f est croissante sur I ?",
+        "back": "Une fonction f est croissante sur I si pour tout x, y ∈ I, x ≤ y ⇒ f(x) ≤ f(y)."
+      },
+      {
+        "id": 24,
+        "front": "Quand dit-on qu'une fonction f est croissante sur I ?",
+        "back": "Une fonction f est croissante sur I si pour tout x, y ∈ I, x ≤ y ⇒ f(x) ≤ f(y) ou f'(x) \u003e0."
+      }
+    ]
+  },
+  {
+    "DeckName": "OOP",
+    "content": [
+      {
+        "id": 0,
+        "front": "Qu'est-ce qu'une classe en OOP?",
+        "back": "Une classe est un modèle ou une définition d'un objet, elle contient ses propriétés (attributs) et méthodes (actions)."
+      },
+      {
+        "id": 1,
+        "front": "Qu'est-ce que le polymorphisme?",
+        "back": "Le polymorphisme est la capacité d'une classe ou d'un objet à prendre plusieurs formes ou à avoir plusieurs méthodes de réalisation."
+      },
+      {
+        "id": 2,
+        "front": "Qu'est-ce que la composition en programmation orientée objet?",
+        "back": "La composition est une technique d'association où une classe possède une instance ou plusieurs instances de classes différentes, pour composer un tout plus grand."
+      },
+      {
+        "id": 3,
+        "front": "Qu'est-ce que l'encapsulation en programmation orientée objet?",
+        "back": "L'encapsulation consiste à dissimuler les détails d'une classe ou d'un objet pour ne pas les rendre accessibles à tous, et ainsi protéger les attributs et méthodes de la classe."
+      }
+    ]
+  },
+  {
+    "DeckName": "PPP",
+    "content": [
+      {
+        "id": 0,
+        "front": "Qu'est-ce qu'une compétence technique ?",
+        "back": "Une expertise et maîtrise d'une méthode ou de machines spécifiques, basée sur des connaissances théoriques, pratiques et techniques, et l'expérience."
+      },
+      {
+        "id": 1,
+        "front": "Donnez des exemples de compétences techniques.",
+        "back": "Poser une fenêtre, acheter au meilleur prix, poser des extensions capillaires, lire une carte météo."
+      },
+      {
+        "id": 2,
+        "front": "Quelles sont les compétences sociales ?",
+        "back": "Aptitudes à communiquer et interagir positivement avec l'entourage."
+      },
+      {
+        "id": 3,
+        "front": "Qu'est-ce qu'une compétence transversale ?",
+        "back": "Compétence utilisable dans n'importe quel secteur d'activité ou métier."
+      },
+      {
+        "id": 4,
+        "front": "Donnez trois exemples de compétences transversales très recherchées.",
+        "back": "Sens de l'organisation, capacité d'adaptation, autonomie."
+      },
+      {
+        "id": 5,
+        "front": "Définissez la \"capacité d'adaptation\" (compétence transversale).",
+        "back": "Capacité à s'adapter à des situations variées et à s'ajuster à différents environnements de travail."
+      },
+      {
+        "id": 6,
+        "front": "Définissez la gestion du stress (compétence transversale).",
+        "back": "Capacité à garder le contrôle de soi face à des situations stressantes."
+      },
+      {
+        "id": 7,
+        "front": "Définissez le travail en équipe (compétence transversale).",
+        "back": "Capacité à travailler et à se coordonner avec les autres pour atteindre des objectifs."
+      },
+      {
+        "id": 8,
+        "front": "De quoi parle la section Ce qui est important pour moi ?",
+        "back": "Des préférences professionnelles : intérêts, valeurs et environnement de travail idéal."
+      },
+      {
+        "id": 9,
+        "front": "Quelles sont les quatre catégories de contraintes professionnelles ?",
+        "back": "Mobilité, santé, famille, horaires et jours de travail."
+      },
+      {
+        "id": 10,
+        "front": "Donnez un exemple de contrainte liée à la santé.",
+        "back": "Ne pas pouvoir travailler debout toute la journée."
+      },
+      {
+        "id": 11,
+        "front": "Donnez un exemple de contrainte liée à la famille.",
+        "back": "Manque de solution pour la garde d'enfants pendant le travail."
+      },
+      {
+        "id": 12,
+        "front": "Donnez un exemple de contrainte liée à la mobilité.",
+        "back": "Ne pas pouvoir travailler loin de son domicile."
+      },
+      {
+        "id": 13,
+        "front": "Donnez un exemple de contrainte liée aux horaires.",
+        "back": "Ne pas pouvoir travailler le weekend."
+      }
+    ]
+  },
+  {
+    "DeckName": "Probabilité",
+    "content": [
+      {
+        "id": 0,
+        "front": "Qu'est-ce que l'univers Ω en probabilité ?",
+        "back": "L'ensemble de tous les résultats possibles d'une expérience aléatoire."
+      },
+      {
+        "id": 1,
+        "front": "Qu'est-ce qu'un événement E en probabilité ?",
+        "back": "Toute partie de l'univers Ω.  E ⊂ Ω"
+      },
+      {
+        "id": 2,
+        "front": "Définissez un événement certain.",
+        "back": "L'univers Ω lui-même."
+      },
+      {
+        "id": 3,
+        "front": "Définissez un événement impossible.",
+        "back": "L'ensemble vide ∅."
+      },
+      {
+        "id": 4,
+        "front": "Qu'est-ce qu'un événement élémentaire ?",
+        "back": "Un singleton de Ω (un ensemble contenant un seul élément)."
+      },
+      {
+        "id": 5,
+        "front": "Comment note-t-on l'événement 'E ou F' ?",
+        "back": "E ∪ F"
+      },
+      {
+        "id": 6,
+        "front": "Comment note-t-on l'événement 'E et F' ?",
+        "back": "E ∩ F"
+      },
+      {
+        "id": 7,
+        "front": "Quand deux événements sont-ils incompatibles ?",
+        "back": "Lorsque leur intersection est vide : E ∩ F = ∅"
+      },
+      {
+        "id": 8,
+        "front": "Quand deux événements sont-ils contraires ?",
+        "back": "S'ils sont incompatibles et que leur union est égale à l'univers : E ∩ F = ∅ et E ∪ F = Ω"
+      },
+      {
+        "id": 9,
+        "front": "Que signifie que E₁, E₂, ..., Eₙ forment une partition de Ω ?",
+        "back": "Les Eᵢ sont deux à deux incompatibles (Eᵢ ∩ Eⱼ = ∅ si i ≠ j) et leur union est égale à Ω (E₁ ∪ E₂ ∪ ... ∪ Eₙ = Ω)."
+      },
+      {
+        "id": 10,
+        "front": "Définissez la probabilité p(A) d'un événement A.",
+        "back": "Une application de P(Ω) vers [0, 1] telle que p(Ω) = 1 et p(E ∪ F) = p(E) + p(F) - p(E ∩ F)."
+      },
+      {
+        "id": 11,
+        "front": "Quelle est la probabilité d'un événement impossible ?",
+        "back": "p(∅) = 0"
+      },
+      {
+        "id": 12,
+        "front": "Si E et F sont incompatibles, quelle est la probabilité de E ∪ F ?",
+        "back": "p(E ∪ F) = p(E) + p(F)"
+      },
+      {
+        "id": 13,
+        "front": "Quelle relation existe entre p(E) et p(Ē) ?",
+        "back": "p(E) + p(Ē) = 1"
+      },
+      {
+        "id": 14,
+        "front": "Si E₁, E₂, ..., Eₙ forment une partition de Ω, quelle relation existe entre leurs probabilités ?",
+        "back": "∑ᵢ p(Eᵢ) = 1"
+      },
+      {
+        "id": 15,
+        "front": "En cas d'équiprobabilité, comment calculer p(E) ?",
+        "back": "p(E) = Card(E) / Card(Ω)"
+      },
+      {
+        "id": 16,
+        "front": "Quand deux événements E et F sont-ils indépendants ?",
+        "back": "Si et seulement si p(E ∩ F) = p(E) × p(F)"
+      },
+      {
+        "id": 17,
+        "front": "Définissez la probabilité conditionnelle p(B/A).",
+        "back": "p(B/A) = p(A ∩ B) / p(A)  (probabilité de B sachant A)"
+      },
+      {
+        "id": 18,
+        "front": "Quelle est la formule des probabilités totales ?",
+        "back": "Si E₁, E₂, ..., Eₙ forment une partition de Ω, alors p(A) = ∑ᵢ p(A/Eᵢ) × p(Eᵢ)"
+      },
+      {
+        "id": 19,
+        "front": "Qu'est-ce qu'une épreuve de Bernoulli ?",
+        "back": "Une expérience aléatoire avec deux issues: succès (S) et échec (E)."
+      },
+      {
+        "id": 20,
+        "front": "Qu'est-ce qu'un schéma de Bernoulli ?",
+        "back": "La répétition de n épreuves de Bernoulli identiques et indépendantes."
+      },
+      {
+        "id": 21,
+        "front": "Dans un schéma de Bernoulli, quelle est la formule pour calculer p(X=k) ?",
+        "back": "p(X=k) = C(n,k) * p^k * (1-p)^(n-k), où n est le nombre d'épreuves, k le nombre de succès, et p la probabilité de succès."
+      },
+      {
+        "id": 22,
+        "front": "Qu'est-ce qu'une variable aléatoire ?",
+        "back": "Une application X: P(Ω) → R qui associe une valeur numérique à chaque événement."
+      },
+      {
+        "id": 23,
+        "front": "Qu'est-ce que l'espérance mathématique E(X) d'une variable aléatoire X ?",
+        "back": "E(X) = Σᵢ xᵢ * p(X=xᵢ)"
+      },
+      {
+        "id": 24,
+        "front": "Qu'est-ce que la variance V(X) d'une variable aléatoire X ?",
+        "back": "V(X) = E(X²) - (E(X))²"
+      },
+      {
+        "id": 25,
+        "front": "Qu'est-ce que l'écart type σ(X) d'une variable aléatoire X ?",
+        "back": "σ(X) = √V(X)"
+      },
+      {
+        "id": 26,
+        "front": "Qu'est-ce que la fonction de répartition d'une variable aléatoire ?",
+        "back": "Une fonction définie sur R qui donne la probabilité que la variable aléatoire soit inférieure ou égale à une valeur donnée."
+      }
+    ]
+  },
+  {
+    "DeckName": "fonction",
+    "content": [
+      {
+        "id": 0,
+        "front": "Qu'est-ce qu'une fonction numérique ?",
+        "back": "Une fonction numérique d'une variable réelle à valeurs réelles est une application f : I → R, où I est une partie de R (généralement un intervalle ou une réunion d'intervalles)."
+      },
+      {
+        "id": 1,
+        "front": "Qu'est-ce que le domaine de définition d'une fonction ?",
+        "back": "Le domaine de définition d'une fonction f est l'ensemble I des valeurs de x pour lesquelles f(x) est définie."
+      },
+      {
+        "id": 2,
+        "front": "Comment définit-on la somme de deux fonctions f et g ?",
+        "back": "La somme de deux fonctions f et g définies sur le même intervalle I est la fonction (f + g)(x) = f(x) + g(x) pour tout x ∈ I."
+      },
+      {
+        "id": 3,
+        "front": "Comment définit-on le produit de deux fonctions f et g ?",
+        "back": "Le produit de deux fonctions f et g définies sur le même intervalle I est la fonction (f × g)(x) = f(x) × g(x) pour tout x ∈ I."
+      },
+      {
+        "id": 4,
+        "front": "Comment définit-on la multiplication d'une fonction f par un scalaire λ ?",
+        "back": "La multiplication d'une fonction f par un scalaire λ ∈ R est la fonction (λ · f)(x) = λ · f(x) pour tout x ∈ I."
+      },
+      {
+        "id": 5,
+        "front": "Comment définit-on la valeur absolue d'une fonction f ?",
+        "back": "La valeur absolue d'une fonction f est la fonction |f|(x) = |f(x)| pour tout x ∈ I."
+      },
+      {
+        "id": 6,
+        "front": "Quand dit-on qu'une fonction f est majorée sur I ?",
+        "back": "Une fonction f est majorée sur I s'il existe un réel M tel que pour tout x ∈ I, f(x) ≤ M."
+      },
+      {
+        "id": 7,
+        "front": "Quand dit-on qu'une fonction f est minorée sur I ?",
+        "back": "Une fonction f est minorée sur I s'il existe un réel m tel que pour tout x ∈ I, f(x) ≥ m."
+      },
+      {
+        "id": 8,
+        "front": "Quand dit-on qu'une fonction f est bornée sur I ?",
+        "back": "Une fonction f est bornée sur I si elle est à la fois majorée et minorée sur I;  ∃ M, m ∈ R : ∀ x ∈ I, m ≤ f(x) ≤ M"
+      },
+      {
+        "id": 9,
+        "front": "Quand dit-on qu'une fonction f est croissante sur I ?",
+        "back": "Une fonction f est croissante sur I si pour tout x, y ∈ I, x ≤ y ⇒ f(x) ≤ f(y)."
+      },
+      {
+        "id": 10,
+        "front": "Quand dit-on qu'une fonction f est strictement croissante sur I ?",
+        "back": "Une fonction f est strictement croissante sur I si pour tout x, y ∈ I, x \u003c y ⇒ f(x) \u003c f(y)."
+      },
+      {
+        "id": 11,
+        "front": "Quand dit-on qu'une fonction f est décroissante sur I ?",
+        "back": "Une fonction f est décroissante sur I si pour tout x, y ∈ I, x ≤ y ⇒ f(x) ≥ f(y)."
+      },
+      {
+        "id": 12,
+        "front": "Quand dit-on qu'une fonction f est strictement décroissante sur I ?",
+        "back": "Une fonction f est strictement décroissante sur I si pour tout x, y ∈ I, x \u003c y ⇒ f(x) \u003e f(y)."
+      },
+      {
+        "id": 13,
+        "front": "Quand dit-on qu'une fonction f est paire ?",
+        "back": "Une fonction f est paire si pour tout x dans son domaine de définition, f(-x) = f(x)."
+      },
+      {
+        "id": 14,
+        "front": "Quand dit-on qu'une fonction f est impaire ?",
+        "back": "Une fonction f est impaire si pour tout x dans son domaine de définition, f(-x) = -f(x)."
+      },
+      {
+        "id": 15,
+        "front": "Quand dit-on qu'une fonction f est périodique de période T ?",
+        "back": "Une fonction f est périodique de période T si pour tout x dans son domaine de définition et pour tout entier n, f(x + nT) = f(x)."
+      },
+      {
+        "id": 16,
+        "front": "Comment définit-on la limite d'une fonction f en a ?",
+        "back": "Soit λ ∈ R. On dit que f a pour limite λ en a si ∀ ε \u003e 0, ∃ δ \u003e 0 tel que ∀ x ∈ I, 0 \u003c |x - a| \u003c δ ⇒ |f(x) - λ| \u003c ε.  On note lim_(x→a) f(x) = λ."
+      },
+      {
+        "id": 17,
+        "front": "Que signifie lim_(x→a+) f(x) = l1 ?",
+        "back": "Cela signifie que la limite à droite de f en a est l1 : ∀ ε \u003e 0, ∃ δ \u003e 0 tel que ∀ x ∈ I, 0 \u003c x - a \u003c δ ⇒ |f(x) - l1| \u003c ε."
+      },
+      {
+        "id": 18,
+        "front": "Que signifie lim_(x→a−) f(x) = l2 ?",
+        "back": "Cela signifie que la limite à gauche de f en a est l2 : ∀ ε \u003e 0, ∃ δ \u003e 0 tel que ∀ x ∈ I, 0 \u003c a - x \u003c δ ⇒ |f(x) - l2| \u003c ε."
+      },
+      {
+        "id": 19,
+        "front": "Quand une fonction admet-elle une limite en un point ?",
+        "back": "Une fonction f admet une limite en a si et seulement si ses limites à droite et à gauche en a existent et sont égales."
+      },
+      {
+        "id": 20,
+        "front": "Quand dit-on qu'une fonction f est continue en un point a ?",
+        "back": "Une fonction f est continue en a si lim_(x→a) f(x) = f(a)."
+      },
+      {
+        "id": 21,
+        "front": "Quand dit-on qu'une fonction f est continue sur un intervalle I ?",
+        "back": "Une fonction f est continue sur un intervalle I si elle est continue en chaque point de I."
+      },
+      {
+        "id": 22,
+        "front": "énoncez le théorème des valeurs intermédiaires",
+        "back": "Soit f une fonction continue sur un segment [a, b]. Pour tout y compris entre f(a) et f(b), il existe c ∈ [a, b] tel que f(c) = y."
+      },
+      {
+        "id": 23,
+        "front": "Quand dit-on qu'une fonction f est dérivable en un point a ?",
+        "back": "Une fonction f est dérivable en a si la limite lim_(x→a) (f(x) - f(a))/(x - a) existe.  On note cette limite f'(a)."
+      },
+      {
+        "id": 24,
+        "front": "énoncez le théorème des accroissements finis",
+        "back": "Soit f une fonction continue sur [a, b] et dérivable sur ]a, b[. Il existe un point c ∈ ]a, b[ tel que f(b) - f(a) = f'(c)(b - a)."
+      },
+      {
+        "id": 25,
+        "front": "énoncez le théorème de Rolle",
+        "back": "Soit f une fonction continue sur [a, b] et dérivable sur ]a, b[ telle que f(a) = f(b). Alors il existe un point c ∈ ]a, b[ tel que f'(c) = 0."
+      },
+      {
+        "id": 26,
+        "front": "énoncez l'inégalité des accroissements finis",
+        "back": "Soit f une fonction continue sur [a, b] et dérivable sur ]a, b[. S'il existe M tel que |f'(x)| ≤ M pour tout x ∈ ]a, b[, alors pour tout x, y ∈ ]a, b[, |f(x) - f(y)| ≤ M|x - y|."
+      },
+      {
+        "id": 27,
+        "front": "Quand dit-on qu'une fonction f est convexe sur I ?",
+        "back": "Une fonction f est convexe sur I si pour tous a, b ∈ I et λ ∈ [0, 1], f(λa + (1 - λ)b) ≤ λf(a) + (1 - λ)f(b)."
+      },
+      {
+        "id": 28,
+        "front": "Quand dit-on qu'une fonction f est strictement convexe sur I ?",
+        "back": "Une fonction f est strictement convexe sur I si pour tous a, b ∈ I avec a ≠ b et λ ∈ ]0, 1[, f(λa + (1 - λ)b) \u003c λf(a) + (1 - λ)f(b)."
+      },
+      {
+        "id": 29,
+        "front": "Quand dit-on qu'une fonction f est concave sur I ?",
+        "back": "Une fonction f est concave sur I si -f est convexe sur I."
+      }
+    ]
+  }
+]

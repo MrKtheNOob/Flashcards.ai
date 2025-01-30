@@ -1,0 +1,25 @@
+.decks{
+    border-radius:5px;
+    border:1px solid black;
+}
+.hoverable-card:hover,button:hover{
+    background-color: rgb(222, 222, 222);
+}
+
+.edit-btn{
+    position: absolute;
+    left: 80%;
+    border-radius:10px;
+    font-size: 1.3em;
+}
+.edit-deck-btns {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    left: 85%;
+  }
+.decks-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

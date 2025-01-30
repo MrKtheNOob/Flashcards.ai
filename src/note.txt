@@ -1,0 +1,44 @@
+make an edit video and a tutorial video in your youtube channel for the AIflashcard app
+we are making views with this one  
+I want to make the home page 
+big ass label with a picture and then a big message saying utilisez le pouvoir de l'ia 
+pour mémoriser rapisement vos lecons
+and then a cute button in blue with rounded sides to make an account 
+use your alert component to signal that request went wrong
+the responsivity of the menu is ass 
+slacking off is bad 
+for 4 days I was messed up watching anime during the day and playing meaningless games
+and going to this useless meeting draining my entire energy and fucking up my mental schedules
+I am not doing this again except it has meaning otherwise fuck off
+now I need to make a white night to makes this up cuz of the sterss of the day and theses motherfucing npcs
+
+I can put keybinds for pc so that they don't need to use the mouse to turn and navigate throught the cards
+oh my days this came up just now : put math keyboard to add math to he flashcards so that people can put math in
+there falshcards and learn formulas
+I need a functionality to stop the request to generate flashcards
+gonna have to be using ctx for that
+
+Imma need to add the possibility to create a new deck from the aigenerate menu
+so that man can save the new cards in a a new deck
+I don't know where you put the form data but it is useless cuz its not even a form
+just send it through json like everything
+we have a loading animation now , put it everywhere
+
+
+Holy crap .If I knew the first thing I would do is this stupid authentication
+database shema and auth are the first thing that should be sorted before doing anything else
+
+when response is 401 then navigate to the auth page to log in
+My ego is so high rn 
+I need to make it ,deploy it so that its satisfied 
+I need to finish this
+no wonder I can't sleep lately 
+I have way more to learn in backend
+I need to go deep into these middleware,context stuff
+I could be exelent in golang and then market myself as is very good golang while explaining how good and 
+better golang is compared to yava
+Ai Prompt:Generate educational flashcards in french from the following content.
+Each flashcard should include:A 'front' field with a question summarizing a key concept.
+A 'back' field with a concise explanation or definition answering the question.
+Output the flashcards as a JSON array, with each flashcard as an object containing the 'front' and 'back' attributes.
+Use clear, factual language and keep the responses concise . Here is the content to process:

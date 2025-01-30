@@ -1,0 +1,82 @@
+.App{
+    width:100vw;
+    height: 100vh;
+}
+.loading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: min-content;
+    z-index: 100;
+}
+#tsparticles{
+    position: absolute;
+    z-index: -1;
+}
+h1{
+    color:white
+}
+body{
+    margin:0;
+    padding:0;
+}
+/* Menu style */
+.flashcard-grid{   
+    display: grid;
+    gap: 20px;
+    justify-content: center;
+    grid-template-columns: 30em 30em 30em;
+}
+.edit-btns{
+    display: flex;
+    gap: 70px;
+    position: absolute;
+    bottom: 16px;      
+    left: 50%;     
+    transform: translateX(-50%);
+}
+@media (max-width:1400px) {  
+    
+    .flashcard-grid{
+        font-size: 0.8em;
+        
+        grid-template-columns: 30em 30em;
+        
+    }
+    .card-title,.card-text{
+        font-size:1.4rem;
+    }
+    .edit-btns button{
+        font-size: 1.5em;
+    }
+    .edit-btns{
+        gap:10px;
+        
+    }
+}
+.to-exercice{
+    position: fixed;
+    top: 85%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+}   
+/* End of menu style */
+
+/* Exercice style */
+
+/* End of Exercice style */
+
+@media (max-width:1024px) {
+    .flashcard-grid{
+        display: flex;
+        flex-direction: column;
+    }
+    .card{
+        width: 80%;
+        margin: auto;
+    }
+    .edit-btns{
+        position:relative
+    }
+}
