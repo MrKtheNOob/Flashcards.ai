@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import CardEditor from "../components/CardEditor";
@@ -22,6 +22,7 @@ export default function Menu() {
   const [selected, changeSelected] = useState<boolean>(false);
   const [isEditing, changeEditState] = useState<boolean>(false);
   const [errorState, setErrorState] = useState<boolean>(false);
+  const [cards,setCards]   = useState<ReactNode[]>([]);
   const navigate = useNavigate();
   const goToImportWithJsonPage = () => {
     navigate("/importwithjson");
@@ -46,20 +47,20 @@ export default function Menu() {
       changeEditState(false);
       return;
     }
-    const newCard: Flashcard = { front: front, back: back };
+    const newCard: Flashcard = { Front: front,Back: back };
     setFlashcardData([...flashcardData, newCard]);
     update(newCard);
     changeEditState(false);
   };
-  const handleEditedCard = () => {
+  const handleEditedCard = useCallback(() => {
     changeSelected(true);
     if (selected) {
       document.body.style.backgroundColor = "white";
     } else {
       document.body.style.backgroundColor = "black";
     }
-  };
-  const handleDeleteCard = (flashcardToRemove: Flashcard) => {
+  }, [selected]);
+  const handleDeleteCard = useCallback((flashcardToRemove: Flashcard) => {
     //send delete request
     deleteFlashcard({FlashcardToRemove:flashcardToRemove,deckname:id??""}).then((error) => {
       if (error) {
@@ -71,28 +72,33 @@ export default function Menu() {
 
     setFlashcardData(
       flashcardData.filter(
-        (flashcard: Flashcard) =>
-          flashcard.front !== flashcardToRemove.front &&
-          flashcard.back !== flashcardToRemove.back
+      (flashcard: Flashcard) =>
+        flashcard.Front !== flashcardToRemove.Front &&
+        flashcard.Back !== flashcardToRemove.Back
       )
     );
-  };
+  }, [flashcardData, id]);
 
   //TODO:add a round button centered horizontaly at the bottom of the screen that should say
   //  to start the exercice
-  const cards: ReactNode[] = [];
-  flashcardData.forEach((flashcard) => {
-    cards.push(
+  
+  const mapFlashcards = useCallback(() => {
+    const newCards = flashcardData.map((flashcard,index) => (
       <Card
-        key={flashcard.id}
-        front={flashcard.front}
-        back={flashcard.back}
+        key={index} // Assuming each flashcard has a unique id
+        front={flashcard.Front}
+        back={flashcard.Back}
         deckname={String(id)}
         onChange={handleEditedCard}
         onDelete={handleDeleteCard}
       />
-    );
-  });
+    ));
+    setCards(newCards);
+  }, [flashcardData, handleEditedCard, handleDeleteCard, id]);
+
+  useEffect(() => {
+    mapFlashcards();
+  }, [mapFlashcards]);
 
   return (
     <>
@@ -115,6 +121,11 @@ export default function Menu() {
             type="normal"
             textContent="Importer Flashcards avec json"
             onClick={goToImportWithJsonPage}
+          />
+          <Button
+            type="normal"
+            textContent="Cree flashcard avec l'IA"
+            onClick={()=>{window.location.href="/flashcards/ai-generated"}}
           />
         </div>
         {flashcardData.length >0 && (

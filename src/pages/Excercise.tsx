@@ -17,11 +17,11 @@ const getDataAndUpdateState = async (
       setFlashcards(result.data);
       setFetch(true);
     }
-  });
+  }).catch(()=>{setFetch(false)});
 };
 export default function Exercise() {
   const {id}=useParams()
-  
+  //replace the alert by an infinit loading loop
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [fetched, setFetch] = useState(false);
   if (!fetched){
@@ -57,18 +57,19 @@ export default function Exercise() {
       <Header selectedPage="decks" />
       <ParticlesComponent/>
       <div style={{overflow:"hidden"}}>
-      <h2 className="text-center" style={{fontSize:"1em",margin:"30px"}}>Maîtrisez les concepts en feuilletant des flashcards : testez vos connaissances, renforcez votre mémoire et suivez vos progrès une carte à la fois !</h2>
+      <h2 className="text-center" style={{color:"white",fontSize:"1em",margin:"30px"}}>Maîtrisez les concepts en feuilletant des flashcards : testez vos connaissances, renforcez votre mémoire et suivez vos progrès une carte à la fois !</h2>
       {fetched ? (
         <>
           <FlipCard
-            front={flashcards[count].front}
-            back={flashcards[count].back}
+            front={flashcards[count].Front}
+            back={flashcards[count].Back}
             onChange={ChangeCard}
           />
         </>
       ) : (
+        
         <Alert onClose={()=>{setFetch(false)}}>
-          <h1>Error:Could not fetch flashcards</h1>
+          <h1 style={{color:"black"}}>Error:Could not fetch flashcards</h1>
         </Alert>
       )}
       </div>

@@ -37,6 +37,7 @@ export default function SaveCardWindow({
           alert(response);
         } else {
           alert("Cards saved successfully");
+          window.location.href="/decks"
         }
       });
     },
@@ -115,7 +116,7 @@ export default function SaveCardWindow({
       <div className="select-decks">
         {addingDeck ? (
           <>
-            <h1>Add new deck</h1>
+            <h1 style={{color:"black"}}>Add new deck</h1>
             <input
               style={{ margin: "2em" }}
               ref={inputRef}
@@ -138,7 +139,7 @@ export default function SaveCardWindow({
           </>
         ) : (
           <>
-            <h1>Choose in what deck to save your new cards</h1>
+            <h1 style={{color:"black"}}>Choose in what deck to save your new cards</h1>
             <br />
             {decks}
           </>

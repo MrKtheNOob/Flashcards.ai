@@ -3,10 +3,12 @@ export interface JSONData {
   content: Flashcard[];
 }
 export interface Flashcard {
-  id?: number;
-  front: string;
-  back: string;
+  ID?: number;
+  Front: string;
+  Back: string;
+  DeckID?: number;
 }
+
 export type Result<T> = {
   data: T | null;
   error: Error | null;
@@ -15,16 +17,14 @@ type UpdatePayload = {
   deckname: string | undefined;
   flashcard: Flashcard;
 };
-const UrlPrefix = "http://0.0.0.0:8080";
+const UrlPrefix = "http://192.168.45.42:8080";
 export async function fetchFlashcards(
   deckname: string
 ): Promise<Result<Flashcard[]>> {
   //make update= to setFlashcard
   // setLoading(true); // Start loading
 
-  const response = await fetch(
-    UrlPrefix + "/api/flashcards/decks/" + deckname
-  );
+  const response = await fetch(UrlPrefix + "/api/flashcards/decks/" + deckname);
   switch (response.status) {
     case 200:
       return { data: (await response.json()) as Flashcard[], error: null };
@@ -55,7 +55,7 @@ export async function updateMultipleFlashcards(
       if (error !== null) {
         return error;
       }
-      return null;
+      
     }
     return null;
   } catch (error) {
@@ -77,8 +77,8 @@ export async function deleteDeck(deckname: string): Promise<Error | null> {
   });
 
   if (!response.ok) {
-    if (response.status==401){
-      return new Error("go back to auth")
+    if (response.status == 401) {
+      return new Error("go back to auth");
     }
     return new Error(
       `HTTP error! status: ${response.status} text:${await response.text()}`
@@ -92,8 +92,8 @@ export async function updateFlashcards(
   const response = await fetch(
     UrlPrefix +
       (isUpdatePayload(payload)
-        ? "/flashcards/update"
-        : "/flashcards/decks/update"),
+        ? "/api/flashcards/update"
+        : "/api/flashcards/decks/update"),
     {
       method: "POST",
       headers: {
@@ -104,8 +104,8 @@ export async function updateFlashcards(
   );
 
   if (!response.ok) {
-    if (response.status==401){
-      return new Error("go back to auth")
+    if (response.status == 401) {
+      return new Error("go back to auth");
     }
     return new Error(
       `HTTP error! status: ${response.status} text:${await response.text()}`
@@ -115,16 +115,11 @@ export async function updateFlashcards(
 }
 export async function fetchDecks(): Promise<Result<string[]>> {
   try {
-    const response = await fetch(UrlPrefix + "/api/flashcards/decks",{
-      headers:{
-        "Access-Control-Allow-Credentials":"true"
-      ,},
-      credentials:"include"
-    });
+    const response = await fetch(UrlPrefix + "/api/flashcards/decks", {});
 
     if (!response.ok) {
-      if (response.status==401){
-        return {data:null,error:new Error("go back to auth")}
+      if (response.status == 401) {
+        return { data: null, error: new Error("go back to auth") };
       }
       return {
         data: null,
@@ -141,20 +136,18 @@ export async function fetchDecks(): Promise<Result<string[]>> {
 }
 export async function updateDecks(newDeckName: string): Promise<Error | null> {
   try {
-    const response = await fetch(
-      UrlPrefix + "/api/flashcards/decks/update",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ Deckname: newDeckName }),
-      }
-    );
+    const response = await fetch(UrlPrefix + "/api/flashcards/decks/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        
+      },
+      body: JSON.stringify({ Deckname: newDeckName }),
+    });
 
     if (!response.ok) {
-      if (response.status==401){
-        return new Error("go back to auth")
+      if (response.status == 401) {
+        return new Error("go back to auth");
       }
       return new Error(
         `HTTP error! status: ${response.status} text:${await response.text()}`
@@ -180,8 +173,8 @@ export async function promptRequest(
     body: formData,
   });
   if (!response.ok) {
-    if (response.status==401){
-      return {data:null,error:new Error("go back to auth")}
+    if (response.status == 401) {
+      return { data: null, error: new Error("go back to auth") };
     }
     alert("Request error:" + (await response.text()));
     const err = new Error(`HTTP error! status: ${response.status}`);
@@ -192,9 +185,10 @@ export async function promptRequest(
   return { data: result, error: null };
 }
 
-export async function deleteFlashcard(
-  payload:{FlashcardToRemove:Flashcard,deckname:string}
-): Promise<Error | null> {
+export async function deleteFlashcard(payload: {
+  FlashcardToRemove: Flashcard;
+  deckname: string;
+}): Promise<Error | null> {
   try {
     const response = await fetch(UrlPrefix + "/api/flashcards/delete", {
       method: "DELETE",
@@ -204,7 +198,7 @@ export async function deleteFlashcard(
       body: JSON.stringify(payload),
     });
     if (!response.ok) {
-      new Error("go back to auth")
+      new Error("go back to auth");
       return new Error(
         `HTTP error! status: ${response.status} text:${await response
           .text()
@@ -250,10 +244,9 @@ export async function loginRequest(payload: LoginPayload): Promise<number> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        
       },
       body: JSON.stringify(payload),
-      credentials: 'include' // This is important to include cookies in the request
+      credentials: "include", // This is important to include cookies in the request
     });
     //it should return 202 if login is successfull
     return response.status;
@@ -262,4 +255,3 @@ export async function loginRequest(payload: LoginPayload): Promise<number> {
     return 0;
   }
 }
-

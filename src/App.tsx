@@ -10,6 +10,9 @@ import Quiz from "./pages/Quiz";
 import AuthPage from "./pages/AuthPage";
 
 export default function App() {
+  setTimeout(() => {
+    console.log("hey")
+  }, 100);
   return (
     <>
       <BrowserRouter>

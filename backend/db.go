@@ -101,15 +101,9 @@ func (db *DatabaseManager) CreateDeck(userID int, deckname string) error {
 }
 
 func (db *DatabaseManager) CreateFlashcard(deckID int, front string, back string) error {
-	// Check if the deck ID exists
-	deck, err := db.GetDecksByUserID(deckID)
-	if !(deck != nil && err != nil) {
-		return errDeckDoesNotExist
-	}
 	// Proceed with the insertion
-
 	insertQuery := "INSERT INTO Flashcards (deck_id, front, back) VALUES (?, ?, ?)"
-	_, err = db.DB.Exec(insertQuery, deckID, front, back)
+	_, err := db.DB.Exec(insertQuery, deckID, front, back)
 
 	if err != nil {
 		return fmt.Errorf("error inserting flashcard: %v", err)
@@ -145,8 +139,9 @@ func (db *DatabaseManager) GetUserByUsernameAndPassword(username string, passwor
 	return &user, nil
 }
 func (db *DatabaseManager) GetUserByID(userID int) (*User, error) {
-	query := "SELECT FROM Users WHERE id=?"
+	query := "SELECT id, username, password, created_at FROM Users WHERE id=?"
 	row := db.DB.QueryRow(query, userID)
+
 	var user User
 	err := row.Scan(&user.ID, &user.Username, &user.Password, &user.CreatedAt)
 	if err != nil {
@@ -154,6 +149,7 @@ func (db *DatabaseManager) GetUserByID(userID int) (*User, error) {
 	}
 	return &user, nil
 }
+
 func (db *DatabaseManager) GetUserByUsername(username string) (*User, error) {
 	query := "SELECT id, username, password, created_at FROM Users WHERE username = ?"
 	row := db.DB.QueryRow(query, username)
@@ -222,12 +218,8 @@ func (db *DatabaseManager) GetDecksByUserID(userID int) ([]Deck, error) {
 
 	return decks, nil
 }
-func (db *DatabaseManager) GetFlashcardsFromDeck(deckname string, userID int) ([]Flashcard, error) {
+func (db *DatabaseManager) GetFlashcardsFromDeck(deck *Deck, userID int) ([]Flashcard, error) {
 	//check if the deck exists
-	deck, err := db.GetDeckByName(deckname, userID)
-	if err != nil {
-		return nil, err
-	}
 	rows, err := db.DB.Query("SELECT id, front, back, deck_id FROM Flashcards WHERE deck_id = ?", deck.ID)
 	if err != nil {
 		return nil, fmt.Errorf("%s %s", queryErrorPrefix, err.Error())

@@ -10,12 +10,10 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"sync"
 
 	"math/rand"
 
 	"github.com/google/generative-ai-go/genai"
-	"github.com/gorilla/sessions"
 
 	"google.golang.org/api/option"
 )
@@ -57,17 +55,17 @@ const (
 	logsFilePath       = "./prompt_logs.json"
 )
 
-var (
-	sessionStore = make(map[string]string) // sessionID -> username
-	mu           sync.Mutex
-)
+// var (
+// 	sessionStore = make(map[string]string) // sessionID -> username
+// 	mu           sync.Mutex
+// )
 
 func handlePreflightRequest(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Handling preflight request")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
+
 	if r.Method == http.MethodOptions {
 		w.WriteHeader(http.StatusOK)
 		return
@@ -163,25 +161,14 @@ func handleUpdateDecks(w http.ResponseWriter, r *http.Request, db *DatabaseManag
 	log.Println("Connection to /flashcards/decks/update from", r.RemoteAddr)
 	fmt.Println("Handling update decks request")
 
-	userID := r.Context().Value("userID").(int)
+	// userID := r.Context().Value("userID").(int)
 
+	userID := 4
 	var payload struct{ DeckName string }
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		log.Println(err)
-		return
-	}
-
-	if r.Method == http.MethodDelete {
-		err = db.DeleteDeck(payload.DeckName, userID)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			log.Println(err.Error())
-			return
-		}
-		log.Printf("Deck %s has been deleted\n/flashcards/decks/update success\n", payload.DeckName)
-		fmt.Println("Update decks request handled successfully")
 		return
 	}
 
@@ -207,7 +194,8 @@ func addFlashcardHandler(w http.ResponseWriter, r *http.Request, db *DatabaseMan
 	fmt.Println("Connection to /flashcards/update from", r.RemoteAddr)
 	fmt.Println("Handling add flashcard request")
 
-	userID := r.Context().Value("userID").(int)
+	// userID := r.Context().Value("userID").(int)
+	userID := 4
 
 	var payload Payload
 	err := json.NewDecoder(r.Body).Decode(&payload)
@@ -245,7 +233,8 @@ func deleteFlashcardHandler(w http.ResponseWriter, r *http.Request, db *Database
 	fmt.Println("Connection to /flashcards/delete from", r.RemoteAddr)
 	fmt.Println("Handling delete flashcard request")
 
-	userID := r.Context().Value("userID").(int)
+	// userID := r.Context().Value("userID").(int)
+	userID := 4
 
 	var payload struct {
 		FlashcardToRemove Flashcard
@@ -260,7 +249,9 @@ func deleteFlashcardHandler(w http.ResponseWriter, r *http.Request, db *Database
 
 	deck, err := db.GetDeckByName(payload.Deckname, userID)
 	if err != nil {
-		log.Printf("Could not find deck of name %s;Error:%s", payload.Deckname, err.Error())
+		msg := fmt.Sprintf("Could not find deck of name %s;Error:%s\n", payload.Deckname, err.Error())
+		log.Println(msg)
+		http.Error(w, msg, http.StatusNotFound)
 	}
 
 	err = db.DeleteFlashcard(deck.ID, payload.FlashcardToRemove.Front, payload.FlashcardToRemove.Back)
@@ -272,25 +263,34 @@ func deleteFlashcardHandler(w http.ResponseWriter, r *http.Request, db *Database
 
 	w.WriteHeader(http.StatusOK)
 	log.Println("/flashcards/delete success")
-	fmt.Println("Delete flashcard request handled successfully")
+
+	log.Println("flashcard %v successfully deleted", payload.FlashcardToRemove)
+
 }
 
 func handleGetFlashcards(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
 	handlePreflightRequest(w, r)
 	fmt.Println("Handling get flashcards request")
 
-	userID := r.Context().Value("userID").(int)
+	// userID := r.Context().Value("userID").(int)
+	userID := 4
 
-	deckName := r.URL.Query().Get("deckname")
+	deckName := r.PathValue("deckname")
 	fmt.Printf("Connection to /flashcards/decks/%s from %v\n", deckName, r.RemoteAddr)
-
-	flashcards, err := db.GetFlashcardsFromDeck(deckName, userID)
+	deck, err := db.GetDeckByName(deckName, userID)
+	if deck == nil {
+		http.Error(w, fmt.Sprintf("Deck of name %s not found", deckName), http.StatusNotFound)
+		return
+	}
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	flashcards, err := db.GetFlashcardsFromDeck(deck, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Println(err)
 		return
 	}
-
 	response, err := json.Marshal(flashcards)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -310,7 +310,8 @@ func getDecksHander(w http.ResponseWriter, r *http.Request, db *DatabaseManager)
 	log.Println("Connection to /flashcards/decks from", r.RemoteAddr)
 	fmt.Println("Handling get decks request")
 
-	userID := r.Context().Value("userID").(int)
+	// userID := r.Context().Value("userID").(int)
+	userID := 4
 
 	decks, err := db.GetDecksByUserID(userID)
 	if err != nil {
@@ -319,8 +320,12 @@ func getDecksHander(w http.ResponseWriter, r *http.Request, db *DatabaseManager)
 		log.Println(err)
 		return
 	}
-
-	response, err := json.Marshal(decks)
+	fmt.Println(decks)
+	var decknames []string
+	for i := range decks {
+		decknames = append(decknames, decks[i].Name)
+	}
+	response, err := json.Marshal(decknames)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Println(err)
@@ -340,124 +345,124 @@ func generateSessionID() string {
 }
 
 // Middleware to check if the user is authenticated
-var store = sessions.NewCookieStore([]byte("your-secret-key"))
+// var store = sessions.NewCookieStore([]byte("your-secret-key"))
 
 // Middleware to check if the user is authenticated
-func authMiddleware(next http.HandlerFunc, db *DatabaseManager) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		handlePreflightRequest(w, r)
-		session, err := store.Get(r, "session")
-		if err != nil || session.Values["username"] == nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
-		}
-		username := session.Values["username"].(string)
-		// Retrieve user ID from the database
-		user, err := db.GetUserByUsername(username)
-		if err != nil {
-			http.Error(w, "User not found", http.StatusUnauthorized)
-			return
-		}
+// func next http.HandlerFunc, db *DatabaseManager) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		handlePreflightRequest(w, r)
+// 		session, err := store.Get(r, "session")
+// 		if err != nil || session.Values["username"] == nil {
+// 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+// 			return
+// 		}
+// 		username := session.Values["username"].(string)
+// 		// Retrieve user ID from the database
+// 		user, err := db.GetUserByUsername(username)
+// 		if err != nil {
+// 			http.Error(w, "User not found", http.StatusUnauthorized)
+// 			return
+// 		}
 
-		// Attach user ID to the request context
-		ctx := context.WithValue(r.Context(), "userID", user.ID)
-		r = r.WithContext(ctx)
+// 		// Attach user ID to the request context
+// 		ctx := context.WithValue(r.Context(), "userID", user.ID)
+// 		r = r.WithContext(ctx)
 
-		// Call the next handler
-		next(w, r)
-	}
-}
+// 		// Call the next handler
+// 		next(w, r)
+// 	}
+// }
 
 // Register Handler
-func registerHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
-	handlePreflightRequest(w, r)
-	log.Println("Connection to /register from", r.RemoteAddr)
-	fmt.Println("Handling register request")
+// func registerHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
+// 	handlePreflightRequest(w, r)
+// 	log.Println("Connection to /register from", r.RemoteAddr)
+// 	fmt.Println("Handling register request")
 
-	var payload RegisterPayload
+// 	var payload RegisterPayload
 
-	err := json.NewDecoder(r.Body).Decode(&payload)
-	if err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		log.Println(err)
-		return
-	}
+// 	err := json.NewDecoder(r.Body).Decode(&payload)
+// 	if err != nil {
+// 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+// 		log.Println(err)
+// 		return
+// 	}
 
-	err = db.CreateUser(payload.Username, payload.Password)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+// 	err = db.CreateUser(payload.Username, payload.Password)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusBadRequest)
+// 		return
+// 	}
 
-	w.WriteHeader(http.StatusCreated)
-	log.Printf("User %s registered successfully\n", payload.Username)
-	fmt.Println("Register request handled successfully")
-}
+// 	w.WriteHeader(http.StatusCreated)
+// 	log.Printf("User %s registered successfully\n", payload.Username)
+// 	fmt.Println("Register request handled successfully")
+// }
 
-// Login Handler
-func loginHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
-	handlePreflightRequest(w, r)
-	log.Println("Connection to /login from", r.RemoteAddr)
-	fmt.Println("Handling login request")
+// // Login Handler
+// func loginHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
+// 	handlePreflightRequest(w, r)
+// 	log.Println("Connection to /login from", r.RemoteAddr)
+// 	fmt.Println("Handling login request")
 
-	var credentials struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
+// 	var credentials struct {
+// 		Username string `json:"username"`
+// 		Password string `json:"password"`
+// 	}
 
-	err := json.NewDecoder(r.Body).Decode(&credentials)
-	if err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		log.Println(err)
-		return
-	}
+// 	err := json.NewDecoder(r.Body).Decode(&credentials)
+// 	if err != nil {
+// 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+// 		log.Println(err)
+// 		return
+// 	}
 
-	// Authenticate user with your database
-	err = db.AuthenticateUser(credentials.Username, credentials.Password)
-	if err != nil {
-		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
-		log.Println(err)
-		return
-	}
+// 	// Authenticate user with your database
+// 	err = db.AuthenticateUser(credentials.Username, credentials.Password)
+// 	if err != nil {
+// 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+// 		log.Println(err)
+// 		return
+// 	}
 
-	// Create a new session
-	session, _ := store.Get(r, "session")
-	session.Values["username"] = credentials.Username
-	session.Options = &sessions.Options{
-		Path:     "/",
-		MaxAge:   86400, // 1 day
-		HttpOnly: true,
-	}
+// 	// Create a new session
+// 	session, _ := store.Get(r, "session")
+// 	session.Values["username"] = credentials.Username
+// 	session.Options = &sessions.Options{
+// 		Path:     "/",
+// 		MaxAge:   86400, // 1 day
+// 		HttpOnly: true,
+// 	}
 
-	// Save the session
-	err = session.Save(r, w)
-	if err != nil {
-		http.Error(w, "Could not save session", http.StatusInternalServerError)
-		log.Println(err)
-		return
-	}
+// 	// Save the session
+// 	err = session.Save(r, w)
+// 	if err != nil {
+// 		http.Error(w, "Could not save session", http.StatusInternalServerError)
+// 		log.Println(err)
+// 		return
+// 	}
 
-	w.WriteHeader(http.StatusAccepted)
-	fmt.Fprintf(w, "Hello, %s! You are authenticated.\n", credentials.Username)
-	fmt.Println("Login request handled successfully")
-}
+// 	w.WriteHeader(http.StatusAccepted)
+// 	fmt.Fprintf(w, "Hello, %s! You are authenticated.\n", credentials.Username)
+// 	fmt.Println("Login request handled successfully")
+// }
 
-// Logout Handler
-func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	handlePreflightRequest(w, r)
-	log.Println("Connection to /logout from", r.RemoteAddr)
-	fmt.Println("Handling logout request")
+// // Logout Handler
+// func logoutHandler(w http.ResponseWriter, r *http.Request) {
+// 	handlePreflightRequest(w, r)
+// 	log.Println("Connection to /logout from", r.RemoteAddr)
+// 	fmt.Println("Handling logout request")
 
-	session, _ := store.Get(r, "session")
+// 	session, _ := store.Get(r, "session")
 
-	// Invalidate the session
-	session.Options.MaxAge = -1
-	session.Save(r, w)
+// 	// Invalidate the session
+// 	session.Options.MaxAge = -1
+// 	session.Save(r, w)
 
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprintln(w, "You have been logged out.")
-	fmt.Println("Logout request handled successfully")
-}
+// 	w.WriteHeader(http.StatusOK)
+// 	fmt.Fprintln(w, "You have been logged out.")
+// 	fmt.Println("Logout request handled successfully")
+// }
 
 func main() {
 	db, err := InitialiseDB("avnadmin:AVNS_c_IbodfjxAQI1VglZrL@tcp(bamba-sdb-ahmadoubamba706-0e2.c.aivencloud.com:25451)/defaultdb?tls=skip-verify")
@@ -467,50 +472,54 @@ func main() {
 	log.Println("Server started")
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /api/flashcards/decks/{id}", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("GET /api/flashcards/decks/{deckname}", func(w http.ResponseWriter, r *http.Request) {
 		handleGetFlashcards(w, r, db)
-	}, db))
-	router.HandleFunc("GET /api/flashcards/decks", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("GET /api/flashcards/decks", func(w http.ResponseWriter, r *http.Request) {
 		getDecksHander(w, r, db)
-	}, db))
-	router.HandleFunc("OPTIONS /api/flashcards/decks", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("OPTIONS /api/flashcards/decks", func(w http.ResponseWriter, r *http.Request) {
 		getDecksHander(w, r, db)
-	}, db))
-	router.HandleFunc("POST/api/flashcards/decks/update", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("POST /api/flashcards/decks/update", func(w http.ResponseWriter, r *http.Request) {
 		handleUpdateDecks(w, r, db)
-	}, db))
-	router.HandleFunc("OPTIONS/api/flashcards/decks/update", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+
+	router.HandleFunc("OPTIONS /api/flashcards/decks/update", func(w http.ResponseWriter, r *http.Request) {
 		handleUpdateDecks(w, r, db)
-	}, db))
-	router.HandleFunc("POST /api/flashcards/update", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("POST /api/flashcards/update", func(w http.ResponseWriter, r *http.Request) {
 		addFlashcardHandler(w, r, db)
-	}, db))
-	router.HandleFunc("OPTIONS /api/flashcards/update", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("OPTIONS /api/flashcards/update", func(w http.ResponseWriter, r *http.Request) {
 		addFlashcardHandler(w, r, db)
-	}, db))
-	router.HandleFunc("POST /api/flashcards/ai-generated", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("POST /api/flashcards/ai-generated", func(w http.ResponseWriter, r *http.Request) {
 		promptHandler(w, r)
-	}, db))
-	router.HandleFunc("OPTIONS /api/flashcards/ai-generated", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("OPTIONS /api/flashcards/ai-generated", func(w http.ResponseWriter, r *http.Request) {
 		promptHandler(w, r)
-	}, db))
-	router.HandleFunc("DELETE /api/flashcards/delete", authMiddleware(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("OPTIONS /api/flashcards/delete", func(w http.ResponseWriter, r *http.Request) {
 		deleteFlashcardHandler(w, r, db)
-	}, db))
-	router.HandleFunc("POST /api/register", func(w http.ResponseWriter, r *http.Request) {
-		registerHandler(w, r, db)
 	})
-	router.HandleFunc("OPTIONS /api/register", func(w http.ResponseWriter, r *http.Request) {
-		registerHandler(w, r, db)
+	router.HandleFunc("DELETE /api/flashcards/delete", func(w http.ResponseWriter, r *http.Request) {
+		deleteFlashcardHandler(w, r, db)
 	})
-	router.HandleFunc("POST /api/login", func(w http.ResponseWriter, r *http.Request) {
-		loginHandler(w, r, db)
-	})
-	router.HandleFunc("OPTIONS /api/login", func(w http.ResponseWriter, r *http.Request) {
-		loginHandler(w, r, db)
-	})
-	router.HandleFunc("POST /api/logout", authMiddleware(logoutHandler, db))
-	router.HandleFunc("OPTIONS /api/logout", authMiddleware(logoutHandler, db))
+	// router.HandleFunc("POST /api/register", func(w http.ResponseWriter, r *http.Request) {
+	// 	registerHandler(w, r, db)
+	// })
+	// router.HandleFunc("OPTIONS /api/register", func(w http.ResponseWriter, r *http.Request) {
+	// 	registerHandler(w, r, db)
+	// })
+	// router.HandleFunc("POST /api/login", func(w http.ResponseWriter, r *http.Request) {
+	// 	loginHandler(w, r, db)
+	// })
+	// router.HandleFunc("OPTIONS /api/login", func(w http.ResponseWriter, r *http.Request) {
+	// 	loginHandler(w, r, db)
+	// })
+	// router.HandleFunc("POST /api/logout", logoutHandler)
+	// router.HandleFunc("OPTIONS /api/logout", logoutHandler)
 
 	// Define the path to the frontend folder
 	frontendPath := "../frontend"
@@ -521,7 +530,7 @@ func main() {
 		fmt.Println(r.URL.Path, "Triggered")
 		http.ServeFile(w, r, filepath.Join(frontendPath, "index.html"))
 	})
-	if err := http.ListenAndServe("localhost:8080", router); err != nil {
+	if err := http.ListenAndServe(":8080", router); err != nil {
 		panic(err)
 	}
 

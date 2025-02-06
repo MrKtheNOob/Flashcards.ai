@@ -19,15 +19,15 @@ export default function GenerateFlashcards() {
   const handleSubmit = () => {
     setLoading(true);
     promptRequest(textareaRef.current?.value ?? "").then((response) => {
+      console.log(response)
       if (response.error) {
         alert(response.error);
       } else {
-        const result = response.data;
-        console.log(result);
-        setNewCards((JSON.parse(String(result)) as Flashcard[]) ?? []);
+        setNewCards((response.data as Flashcard[]) ?? []);
       }
-      setLoading(false);
+      setLoading(false);  
     });
+    
   };
   function handleOnCreated(): void {
     setSaveWindow(false)
@@ -38,7 +38,7 @@ export default function GenerateFlashcards() {
       <Header selectedPage="decks" />
       <ParticlesComponent />
       <header className="text-center">
-        <h1>Generate flashcards with AI</h1>
+        <h1 style={{color:"white"}}>Generate flashcards with AI</h1>
         {!newCards && <h2>Enter text or course</h2>}
       </header>
       <main className="text-center">
@@ -53,6 +53,10 @@ export default function GenerateFlashcards() {
           <textarea
             name="text"
             className="text-center"
+            style={{
+              width:"80%",
+              minHeight:"80%"
+            }}
             ref={textareaRef}
           ></textarea>
         )}

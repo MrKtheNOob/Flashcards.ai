@@ -31,7 +31,7 @@ export default function CardEditor({
             onSave(frontRef.current?.value ?? "", backRef.current?.value ?? "");
         }}
       >
-        <h1>{textLabel}</h1>
+        <h1  style={{color:"black"}}>{textLabel}</h1>
         <div
           style={{
             display: "flex",
