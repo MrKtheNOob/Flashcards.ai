@@ -1,23 +1,35 @@
 import { useState } from "react";
 import Button from "./Button";
 import CardEditor from "./CardEditor";
-import { Flashcard, updateFlashcards} from "../APIMethods";
+import { Flashcard, updateFlashcards } from "../APIMethods";
 import Alert from "./Alert";
-import "../App.css"
+import "../styles/App.css";
 interface CardProps {
   front: string;
   back: string;
-  deckname?:string;
-  hoverEffect?:boolean;
+  deckname?: string;
+  hoverEffect?: boolean;
+  withEditButtons?: boolean;
   onChange?: () => void;
   onDelete: (flashcard: Flashcard) => void;
 }
 
-export default function Card({ front, back,deckname,hoverEffect,onChange, onDelete }: CardProps) {
+export default function Card({
+  front,
+  back,
+  deckname,
+  hoverEffect,
+  withEditButtons,
+  onChange,
+  onDelete,
+}: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [cardContent, setCardContent] = useState({ front, back });
   const [confirmDeleteState, setConfirmDeleteState] = useState<boolean>(false);
-  if (typeof(hoverEffect) === "undefined")hoverEffect = false;
+  if (!withEditButtons) {
+    withEditButtons = true;
+  }
+  if (typeof hoverEffect === "undefined") hoverEffect = false;
   const handleEditClick = () => {
     setIsEditing(!isEditing);
     if (onChange) onChange();
@@ -28,7 +40,10 @@ export default function Card({ front, back,deckname,hoverEffect,onChange, onDele
     if (front === "" || back === "") {
       return;
     }
-    updateFlashcards({deckname:deckname,flashcard:{front:front,back:back}})
+    updateFlashcards({
+      deckname: deckname,
+      flashcard: { Front: front, Back: back },
+    });
     setCardContent({ front, back });
   };
   return (
@@ -39,7 +54,7 @@ export default function Card({ front, back,deckname,hoverEffect,onChange, onDele
             setConfirmDeleteState(false);
           }}
         >
-          <h1>Do you want to delete this card</h1>
+          <h1 style={{ color: "black" }}>Do you want to delete this card</h1>
           <div
             style={{
               display: "flex",
@@ -51,7 +66,7 @@ export default function Card({ front, back,deckname,hoverEffect,onChange, onDele
               textContent="yes"
               type="red"
               onClick={() => {
-                onDelete({ front: cardContent.front, back: cardContent.back });
+                onDelete({ Front: cardContent.front, Back: cardContent.back });
                 setConfirmDeleteState(false);
               }}
             />
@@ -67,7 +82,12 @@ export default function Card({ front, back,deckname,hoverEffect,onChange, onDele
       )}
       {isEditing ? (
         <>
-          <CardEditor textLabel="Edit card" currentFront={front} currentBack={back} onSave={handleInputChange} />
+          <CardEditor
+            textLabel="Edit card"
+            currentFront={front}
+            currentBack={back}
+            onSave={handleInputChange}
+          />
           <Button
             type="normal"
             textContent={isEditing ? "Save" : "Edit"}
@@ -76,24 +96,23 @@ export default function Card({ front, back,deckname,hoverEffect,onChange, onDele
         </>
       ) : (
         <div className="card">
-          <div className="card-body" style={{paddingBottom: "50px" }}>
+          <div className="card-body" style={{ paddingBottom: "50px" }}>
             <h5 className="card-title">{cardContent.front}</h5>
             <p className="card-text">{cardContent.back}</p>
-            <div className="edit-btns"
-            >
-              <Button
-                type="normal"
-                textContent={isEditing ? "Save" : "Edit"}
-                onClick={handleEditClick}
-              />
-              <Button
-                type="red"
-                textContent="Delete"
-                onClick={() =>
-                  setConfirmDeleteState(true)
-                }
-              />
-            </div>
+            {withEditButtons && (
+              <div className="edit-btns">
+                <Button
+                  type="normal"
+                  textContent={isEditing ? "Save" : "Edit"}
+                  onClick={handleEditClick}
+                />
+                <Button
+                  type="red"
+                  textContent="Delete"
+                  onClick={() => setConfirmDeleteState(true)}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}

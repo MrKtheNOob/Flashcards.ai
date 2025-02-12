@@ -1,6 +1,6 @@
 import Card from "./Card";
 import { motion } from "framer-motion";
-import "../App.css";
+import "../styles/App.css";
 import { Flashcard } from "../APIMethods";
 interface CardGridProps {
   cards: Flashcard[];
@@ -15,7 +15,7 @@ export default function CardGrid({ cards }: CardGridProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.5, duration: 0.5 }}
         >
-          <Card front={card.front} back={card.back} onDelete={() => {}} />
+          <Card front={card.Front} back={card.Back} withEditButtons={false} onDelete={() => {}} />
         </motion.div>
       ))}
     </div>

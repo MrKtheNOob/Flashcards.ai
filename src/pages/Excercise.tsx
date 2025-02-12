@@ -2,7 +2,7 @@ import { fetchFlashcards, Flashcard } from "../APIMethods";
 import Header from "../components/Header";
 import FlipCard from "../components/FlipCard";
 import Alert from "../components/Alert";
-import { useParams } from "react-router-dom";
+import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import ParticlesComponent from "../components/ParticlesBackground";
 import { useEffect, useState } from "react";
 
@@ -10,9 +10,14 @@ import { useEffect, useState } from "react";
 const getDataAndUpdateState = async (
   setFetch: React.Dispatch<React.SetStateAction<boolean>>,
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcard[]>>,
+  navigate:NavigateFunction,
   deckname:string
 ) => {
   await fetchFlashcards(deckname).then((result) => {
+    if (result.error?.message=="go back to auth"){
+      console.log("Not logged in ,going back to auth")
+      navigate("/authpage");
+    }
     if (result.data !== null){
       setFlashcards(result.data);
       setFetch(true);
@@ -21,11 +26,15 @@ const getDataAndUpdateState = async (
 };
 export default function Exercise() {
   const {id}=useParams()
+<<<<<<< HEAD
   //replace the alert by an infinit loading loop
+=======
+>>>>>>> 5a02aca (stable version with authentiaction working)
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [fetched, setFetch] = useState(false);
+  const navigate=useNavigate()
   if (!fetched){
-    getDataAndUpdateState(setFetch, setFlashcards, id??"");
+    getDataAndUpdateState(setFetch, setFlashcards,navigate,id??"");
   }
   const [count, changeCount] = useState<number>(0);
   const shuffleFlashcards = (flashcards: Flashcard[]): Flashcard[] => {
@@ -35,7 +44,6 @@ export default function Exercise() {
     }
     return flashcards;
   };
-
   useEffect(() => {
     if (fetched) {
       setFlashcards(shuffleFlashcards(flashcards));

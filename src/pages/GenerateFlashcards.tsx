@@ -8,22 +8,26 @@ import CardGrid from "../components/NewCardsGrid";
 
 import Loading from "../components/Loading";
 import SaveCardWindow from "../components/SaveCardWindow";
+import { useNavigate } from "react-router-dom";
 
 export default function GenerateFlashcards() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [newCards, setNewCards] = useState<Flashcard[]>([]);
   const [loading, setLoading] = useState(false);
-
   const [saveWindow, setSaveWindow] = useState<boolean>(false);
-
+  const navigate=useNavigate()
   const handleSubmit = () => {
     setLoading(true);
     promptRequest(textareaRef.current?.value ?? "").then((response) => {
-      console.log(response)
+      if (response.error?.message=="go back to auth"){
+        navigate("/authpage")
+      }
       if (response.error) {
         alert(response.error);
       } else {
-        setNewCards((response.data as Flashcard[]) ?? []);
+        const result = response.data;
+        console.log(result);
+        setNewCards(result??[]);
       }
       setLoading(false);  
     });
@@ -44,7 +48,7 @@ export default function GenerateFlashcards() {
       <main className="text-center">
         {loading ? (
           <>
-            <Loading type={"threedots"} />
+            <Loading type={"threedots"}/>
             <p>Generating Flashcards...</p>
           </>
         ) : newCards.length > 0 ? (
@@ -55,9 +59,11 @@ export default function GenerateFlashcards() {
             className="text-center"
             style={{
               width:"80%",
-              minHeight:"80%"
+              minHeight:"80%",
+              height:"20em",
             }}
             ref={textareaRef}
+            
           ></textarea>
         )}
         <br />
@@ -75,9 +81,7 @@ export default function GenerateFlashcards() {
         </div>
 
         {saveWindow && (
-          
             <SaveCardWindow newCards={newCards} onCreatedDeck={handleOnCreated}/>
-          
         )}
       </main>
     </>

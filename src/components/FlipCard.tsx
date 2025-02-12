@@ -1,4 +1,4 @@
-import "../FlipCard.css"; // Assuming styles are in this file
+import "../styles/FlipCard.css"; // Assuming styles are in this file
 import { useState } from "react";
 import Button from "./Button";
 interface FlipCardProps {

@@ -3,7 +3,8 @@ interface DeckProps {
   onDelete?:()=>void;
 }
 import { useEffect, useRef, useState } from "react";
-import "./DeckStyles.css";
+import "../styles/App.css";
+import "../styles/DeckStyles.css"
 import { deleteDeck } from "../APIMethods";
 
 export default function Deck({ title ,onDelete}: DeckProps) {
@@ -27,7 +28,7 @@ export default function Deck({ title ,onDelete}: DeckProps) {
     <>
       <div className="card hoverable-card">
         <div className="deck" onClick={()=>window.location.href='/decks/'+title}>
-          <div className="card-body" style={{ display: "flex" }}>
+          <div className="card-body">
             {isEditing ? (
               <div onClick={(event)=>{event.stopPropagation()}}>
                 <input

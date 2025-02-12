@@ -1,9 +1,10 @@
 import Header from "../components/Header";
-import "../App.css";
+import "../styles/App.css";
 import "../HomeStyles.css";
 import ParticlesComponent from "../components/ParticlesBackground";
 import Button from "../components/Button";
 import { Link } from "react-router-dom";
+import iglogo from "../assets/iglogo.png"
 export default function Home() {
   return (
     <>
@@ -12,11 +13,11 @@ export default function Home() {
         <ParticlesComponent />
         <h1 className="text-center p-5">
           Utilisez le pouvoir de l'IA et des flashcards pour mémoriser rapidement
-          vos leçons
+          vos cours
         </h1>
       </header>
       
-        <Link to="/decks"><Button textContent="Commencer" onClick={()=>{}}/></Link>
+        <div style={{textAlign:"center"}}><Link to="/decks"><Button textContent="Commencer" onClick={()=>{}}/></Link></div>
         <br />
         <br />
         
@@ -58,12 +59,9 @@ export default function Home() {
       
       <footer>
         <h1>Contacts</h1>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem,
-          ipsum. Voluptate quidem et a suscipit provident debitis. Laboriosam
-          vitae nesciunt aliquid culpa dolor sed, nihil perferendis, soluta
-          voluptatum dolorum quisquam!
-        </p>
+        <a style={{color:"white"}} href="https://www.instagram.com/mr.bndiaye07/">
+          <img src={iglogo} alt="Linto https://www.instagram.com/mr.bndiaye07/" />
+        </a>
       </footer>
     </>
   );

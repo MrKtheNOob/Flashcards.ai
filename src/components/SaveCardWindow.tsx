@@ -11,10 +11,12 @@ import {
   fetchDecks,
   Flashcard,
   updateFlashcards,
+  UpdatePayload,
   updateMultipleFlashcards,
 } from "../APIMethods";
 import AddDeck from "./AddDeck";
 import Alert from "./Alert";
+
 
 interface SaveCardWindowProps {
   newCards: Flashcard[];
@@ -70,7 +72,6 @@ export default function SaveCardWindow({
           />
         </>
       );
-
       setDecks(decksPlusAddBtn);
     });
   }, [handleSelectDeck,addingDeck]);
@@ -81,6 +82,7 @@ export default function SaveCardWindow({
       alert("Deck name cannot be empty");
       return;
     }
+    //This function name is confusing 
     updateFlashcards({ Deckname: inputValue ?? "" }).then((response) => {
       if (response) {
         alert(response);
@@ -88,6 +90,11 @@ export default function SaveCardWindow({
         onCreatedDeck();
         alert("Deck created successfully");
       }
+    }).then(()=>{
+      const cardsToAdd:UpdatePayload[]=newCards.map((newCard)=>{
+        return {deckname:inputValue??"",flashcard:{Front:newCard.Front,Back:newCard.Back} as Flashcard}
+      })
+      updateMultipleFlashcards(cardsToAdd)
     });
   };
 

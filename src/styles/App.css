@@ -27,19 +27,18 @@ body{
     justify-content: center;
     grid-template-columns: 30em 30em 30em;
 }
+
 .edit-btns{
     display: flex;
-    gap: 70px;
     position: absolute;
-    bottom: 16px;      
-    left: 50%;     
-    transform: translateX(-50%);
+    right: 30%;
+    bottom: 0;
+    gap: 20%;
 }
+
 @media (max-width:1400px) {  
-    
     .flashcard-grid{
         font-size: 0.8em;
-        
         grid-template-columns: 30em 30em;
         
     }
@@ -51,7 +50,7 @@ body{
     }
     .edit-btns{
         gap:10px;
-        
+        right:10%
     }
 }
 .to-exercice{
@@ -77,6 +76,7 @@ body{
         margin: auto;
     }
     .edit-btns{
-        position:relative
+        gap: 1px;
     }
+
 }

@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import "../App.css"
+import "../styles/App.css"
 interface AlertProps {
   onClose?: () => void;
   children: ReactNode;

@@ -3,28 +3,27 @@ export interface JSONData {
   content: Flashcard[];
 }
 export interface Flashcard {
-  ID?: number;
+  id?: number;
   Front: string;
   Back: string;
-  DeckID?: number;
 }
 
 export type Result<T> = {
   data: T | null;
   error: Error | null;
 };
-type UpdatePayload = {
-  deckname: string | undefined;
-  flashcard: Flashcard;
-};
-const UrlPrefix = "http://192.168.45.42:8080";
+
+const UrlPrefix = "http://192.168.73.42:8080";
 export async function fetchFlashcards(
   deckname: string
 ): Promise<Result<Flashcard[]>> {
   //make update= to setFlashcard
   // setLoading(true); // Start loading
 
-  const response = await fetch(UrlPrefix + "/api/flashcards/decks/" + deckname);
+  const response = await fetch(
+    UrlPrefix + "/api/flashcards/decks/" + deckname,
+    { credentials: "include" }
+  );
   switch (response.status) {
     case 200:
       return { data: (await response.json()) as Flashcard[], error: null };
@@ -62,11 +61,6 @@ export async function updateMultipleFlashcards(
     return new Error(`Error when updating multiple flashcards ${error}`);
   }
 }
-function isUpdatePayload(
-  payload: UpdatePayload | { Deckname: string }
-): payload is UpdatePayload {
-  return "deckname" in payload && "flashcard" in payload;
-}
 export async function deleteDeck(deckname: string): Promise<Error | null> {
   const response = await fetch(UrlPrefix + "/api/flashcards/decks/update", {
     method: "DELETE",
@@ -86,6 +80,15 @@ export async function deleteDeck(deckname: string): Promise<Error | null> {
   }
   return null;
 }
+export type UpdatePayload = {
+  deckname: string | undefined;
+  flashcard: Flashcard;
+};
+function isUpdatePayload(
+  payload: UpdatePayload | { Deckname: string }
+): boolean {
+  return "deckname" in payload && "flashcard" in payload;
+}
 export async function updateFlashcards(
   payload: UpdatePayload | { Deckname: string }
 ): Promise<Error | null> {
@@ -100,6 +103,7 @@ export async function updateFlashcards(
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
+      credentials:"include"
     }
   );
 
@@ -115,7 +119,9 @@ export async function updateFlashcards(
 }
 export async function fetchDecks(): Promise<Result<string[]>> {
   try {
-    const response = await fetch(UrlPrefix + "/api/flashcards/decks", {});
+    const response = await fetch(UrlPrefix + "/api/flashcards/decks", {
+      credentials: "include",
+    });
 
     if (!response.ok) {
       if (response.status == 401) {
@@ -131,6 +137,7 @@ export async function fetchDecks(): Promise<Result<string[]>> {
     return { data: data, error: null };
   } catch (error) {
     alert("Request error:" + error);
+
     return { data: null, error: error as Error };
   }
 }
@@ -140,8 +147,8 @@ export async function updateDecks(newDeckName: string): Promise<Error | null> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        
       },
+      credentials:"include",
       body: JSON.stringify({ Deckname: newDeckName }),
     });
 
@@ -171,6 +178,7 @@ export async function promptRequest(
   const response = await fetch(UrlPrefix + "/api/flashcards/ai-generated", {
     method: "POST",
     body: formData,
+    credentials:"include"
   });
   if (!response.ok) {
     if (response.status == 401) {
@@ -232,7 +240,7 @@ export async function registerRequest(
       body: JSON.stringify(payload),
     });
     return response.status;
-    //it should return 202 if login is successfull
+    //it should return 202 if successfull
   } catch (error) {
     console.log(error);
     return 0;
@@ -248,9 +256,10 @@ export async function loginRequest(payload: LoginPayload): Promise<number> {
       body: JSON.stringify(payload),
       credentials: "include", // This is important to include cookies in the request
     });
+    alert(await response.text())
     //it should return 202 if login is successfull
     return response.status;
-  } catch (error) {
+  } catch (error ) {
     console.log(error);
     return 0;
   }

@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import Header from "../components/Header";
 import ParticlesComponent from "../components/ParticlesBackground";
 import Button from "../components/Button";
-import "../App.css";
+import "../styles/App.css";
 import { loginRequest, registerRequest } from "../APIMethods";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 export default function AuthPage() {
@@ -30,16 +30,15 @@ export default function AuthPage() {
         }}
       >
         <div className="card-body" style={{ padding: "40px" }}>
-          <div className="entry">
+          <div className="entry" style={{textAlign:"center"}}>
             {/* Toggle between Login and SignUp */}
-            {isLogin ? <Login navigate={navigate}/> : <SignUp navigate={navigate} />}
+            {isLogin ? <Login navigate={navigate}/> : <SignUp  />}
             {/* Toggle Button */}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              style={{ marginTop: "1rem" }}
             >
               {isLogin
-                ? "Pas encore inscrit ? Créez un compte"
+                ? "Pas de compte ? Cliquez ici"
                 : "Déjà inscrit ? Connectez-vous"}
             </button>
           </div>
@@ -104,7 +103,7 @@ function Login({navigate}:GenericProps) {
 }
 
 // SignUp Component
-function SignUp({navigate}:GenericProps) {
+function SignUp() {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const usernameRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -135,7 +134,7 @@ function SignUp({navigate}:GenericProps) {
       cpassword: cpassword,
     }).then((statusCode) => {
       if (statusCode==202){
-        navigate("/decks")
+        window.location.reload()
       }
     });
   };

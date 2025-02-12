@@ -19,11 +19,13 @@ export default function Decks() {
       try {
         console.log("Fetching decks...");
         const response = await fetchDecks();
-        if (response.error?.message==="go back to auth"){
+        console.log(response) 
+        if (response.error?.message=="go back to auth"){
+          console.log("Not logged in ,going back to auth")
           navigate("/authpage");
         }
-        if (!response.error && response.data !== null) {
-          setDecks(response.data);
+        if (!response.error) {
+          setDecks(response.data??[]);
         } else {
           console.error("Error fetching decks:", response.error);
         }
@@ -38,8 +40,6 @@ export default function Decks() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const handleCreateDeck = () => {
-    //reload the page 
-    
     const inputValue = inputRef.current?.value;
     if (!inputValue) {
       // I want in the future for these alerts to be text in the dialog box in red
@@ -48,7 +48,9 @@ export default function Decks() {
     }
     updateFlashcards({ Deckname: inputValue ?? "" }).then((error) => {
       if (error) {
-        alert(error);
+        if (error.message==="go back to auth"){
+          navigate("/authpage");
+        }
       } else {
         alert("Deck created successfully");
         window.location.reload()
@@ -62,17 +64,13 @@ export default function Decks() {
       <h1 className="text-center">Decks Menu</h1>
       {isEditing && (
         <Alert onClose={()=>setEditState(false)}>
-          <h1 style={{color:"black"}}>Add new deck</h1>
-          <br />
+          <h1 style={{color:"black"}}>Créez un nouveau Deck</h1>
           <input
             style={{ margin: "2em" }}
             ref={inputRef}
             type="text"
             placeholder="Enter new deck name"
           />
-          <br />
-          <br />
-          <br />
           <div
             style={{ display: "flex", justifyContent: "center", gap: "10px" }}
           >

@@ -1,5 +1,5 @@
 import { ThreeDots } from "react-loader-spinner";
-import "../App.css";
+import "../styles/App.css";
 import { motion } from "framer-motion";
 interface LoadingProps {
   type: "threedots" | "circle";

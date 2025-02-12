@@ -2,7 +2,7 @@ make an edit video and a tutorial video in your youtube channel for the AIflashc
 we are making views with this one  
 I want to make the home page 
 big ass label with a picture and then a big message saying utilisez le pouvoir de l'ia 
-pour mémoriser rapisement vos lecons
+pour mémoriser rapisement vos lecons -done
 and then a cute button in blue with rounded sides to make an account 
 use your alert component to signal that request went wrong
 the responsivity of the menu is ass 
@@ -24,18 +24,37 @@ I don't know where you put the form data but it is useless cuz its not even a fo
 just send it through json like everything
 we have a loading animation now , put it everywhere
 
-
-Holy crap .If I knew the first thing I would do is this stupid authentication
+when the user registers, that operation takes time, add a loading animation there
+Holy crap .If I knew the first thing I would do is this stupid authentication+ testing the .env things
 database shema and auth are the first thing that should be sorted before doing anything else
-
+new project , I'm gonna work out the entire backend first before thinking about the frontend
 when response is 401 then navigate to the auth page to log in
+if the user goes to /decks and it is not logged in it should g back to the auth page
+change the options request handlers to take handlePreflightRequest instead
+when you see a problem with a route ,compare it to another route that does about the same job 
+add .module to the css files to make them scoped so there is no conflic between compoennt styles (there are rn )
+Add a page where users can criticise the app 
+put the link pointing to the page on the navbar
+DO IT RN: make the brand in header compoennt an a tag that points to the home page and remove the home 
+a tag since its gonna be redundant , there is only gonna be the deck tab and the feedback tab 
+    feedback tab : man this a whole other thing , 
+        there is the text area + submit but then the comments that I want to be displayed under 
+        di the first and do the rest after deployment 
+we are so close to finshing this thing 
+make sure the loading animation are on point 
+verify the delete card feature ,there seem to be some cors issue perhaps
+verify if the user is redirected to the aut page if not logged in from the gen ai page 
+setup .env
+i think that's it 
+build it and deploy as beta 
+we'll see
 My ego is so high rn 
 I need to make it ,deploy it so that its satisfied 
 I need to finish this
 no wonder I can't sleep lately 
 I have way more to learn in backend
 I need to go deep into these middleware,context stuff
-I could be exelent in golang and then market myself as is very good golang while explaining how good and 
+I could be excelent in golang and then market myself as is very good golang while explaining how good and 
 better golang is compared to yava
 Ai Prompt:Generate educational flashcards in french from the following content.
 Each flashcard should include:A 'front' field with a question summarizing a key concept.

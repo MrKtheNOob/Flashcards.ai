@@ -1,0 +1,6 @@
+/* I need to put the styles that concern the menu from app.css to here*/
+.card-body{
+    display: flex;
+    height: 100%;
+    align-items: center;
+}

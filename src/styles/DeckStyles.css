@@ -1,3 +1,4 @@
+
 .decks{
     border-radius:5px;
     border:1px solid black;
@@ -7,19 +8,28 @@
 }
 
 .edit-btn{
-    position: absolute;
-    left: 80%;
     border-radius:10px;
     font-size: 1.3em;
 }
+
 .edit-deck-btns {
     display: flex;
-    gap: 10px;
-    position: absolute;
-    left: 85%;
+    align-items: center;
+    gap: 10px; 
+    position: absolute;    
+    top: 20%;
+    left:80%;
+    max-height:3em;
+    max-width:3em;
   }
+
 .decks-container{
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+@media (max-width:1000px) {
+ .edit-deck-btns{
+    left: 50%;
+ }   
 }

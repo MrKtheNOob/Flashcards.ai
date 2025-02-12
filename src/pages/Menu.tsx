@@ -2,7 +2,6 @@ import { ReactNode, useCallback, useEffect, useState } from "react";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import CardEditor from "../components/CardEditor";
-import "../App.css";
 import {
   Flashcard,
   deleteFlashcard,
@@ -14,6 +13,7 @@ import Header from "../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import AddCard from "../components/AddCard";
 import ParticlesComponent from "../components/ParticlesBackground";
+import Loading from "../components/Loading";
 
 export default function Menu() {
   const { id } = useParams();
@@ -23,9 +23,10 @@ export default function Menu() {
   const [isEditing, changeEditState] = useState<boolean>(false);
   const [errorState, setErrorState] = useState<boolean>(false);
   const [cards,setCards]   = useState<ReactNode[]>([]);
+  const [loading,setLoading]=useState<boolean>(true)
   const navigate = useNavigate();
-  const goToImportWithJsonPage = () => {
-    navigate("/importwithjson");
+  const HandlegoToAIPageButton = () => {
+    navigate("/flashcards/ai-generated  ");
   };
   const update = (newFlashcard: Flashcard) => {
     updateFlashcards({ deckname: id, flashcard: newFlashcard }).then(
@@ -36,11 +37,17 @@ export default function Menu() {
   };
   if (!fetched)
     fetchFlashcards(id ? id : "").then((result) => {
+      if (result.error?.message=="go back to auth"){
+        console.log("Not logged in ,going back to auth")
+        navigate("/authpage");
+      }
       if (result.data) {
         setFlashcardData([...result.data]);
       } else console.log(result);
       setfetch(true);
+      setLoading(false)
     });
+    
   const handleAddCard = (front: string, back: string) => {
     // Add a new flashcard with default content
     if (front === "" || back === "") {
@@ -72,9 +79,9 @@ export default function Menu() {
 
     setFlashcardData(
       flashcardData.filter(
-      (flashcard: Flashcard) =>
-        flashcard.Front !== flashcardToRemove.Front &&
-        flashcard.Back !== flashcardToRemove.Back
+        (flashcard: Flashcard) =>
+          flashcard.Front !== flashcardToRemove.Front &&
+          flashcard.Back !== flashcardToRemove.Back
       )
     );
   }, [flashcardData, id]);
@@ -116,11 +123,11 @@ export default function Menu() {
       )}
       <h1 className="text-center" style={{color:"white"}}>{id} Flashcards</h1>
       <>
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center" }} className={"other tools"}>
           <Button
             type="normal"
-            textContent="Importer Flashcards avec json"
-            onClick={goToImportWithJsonPage}
+            textContent="Creer Flashcards avec l'IA"
+            onClick={HandlegoToAIPageButton}
           />
           <Button
             type="normal"
@@ -140,10 +147,11 @@ export default function Menu() {
         </div>
         )}
         
-
         <br />
-
+        
         <div className="flashcard-grid">
+          <div style={{textAlign:"center"}}>{loading&&<Loading type="circle"/>}</div>
+        
           {cards.length == 0 ? <h1>There are No cards</h1> : cards}
           <AddCard onClick={() => changeEditState(true)} />
         </div>

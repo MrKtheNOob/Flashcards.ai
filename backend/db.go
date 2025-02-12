@@ -48,12 +48,12 @@ func (*DatabaseManager) PingDB(db *DatabaseManager) error {
 	return db.DB.Ping()
 }
 func (db *DatabaseManager) AuthenticateUser(username, password string) error {
-	user, err := db.GetUserByUsernameAndPassword(username, password)
+	_, err := db.GetUserByUsernameAndPassword(username, password)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return errUserDoesNotExist
+		}
 		return err
-	}
-	if user == nil {
-		return errUserDoesNotExist
 	}
 
 	return nil
@@ -147,6 +147,7 @@ func (db *DatabaseManager) GetUserByID(userID int) (*User, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &user, nil
 }
 
