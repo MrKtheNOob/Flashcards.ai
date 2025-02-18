@@ -11,13 +11,13 @@ export default function Home() {
       <header style={{ color: "white" }}>
         <Header selectedPage="home" />
         <ParticlesComponent />
-        <h1 className="text-center p-5">
+        <h1 className="text-center p-5" style={{color:"white"}}>
           Utilisez le pouvoir de l'IA et des flashcards pour mémoriser rapidement
           vos cours
         </h1>
       </header>
       
-        <div style={{textAlign:"center"}}><Link to="/decks"><Button textContent="Commencer" onClick={()=>{}}/></Link></div>
+        <div style={{textAlign:"center"}}><Link to="/decks"><Button type="normal" onClick={()=>{}}>Commencer</Button></Link></div>
         <br />
         <br />
         
@@ -58,9 +58,9 @@ export default function Home() {
       </main>
       
       <footer>
-        <h1>Contacts</h1>
+        <h1 style={{color:"white"}}>Contacts</h1>
         <a style={{color:"white"}} href="https://www.instagram.com/mr.bndiaye07/">
-          <img src={iglogo} alt="Linto https://www.instagram.com/mr.bndiaye07/" />
+          <img src={iglogo} alt="Link to https://www.instagram.com/mr.bndiaye07/" />
         </a>
       </footer>
     </>

@@ -13,7 +13,7 @@ export type Result<T> = {
   error: Error | null;
 };
 
-const UrlPrefix = "http://192.168.73.42:8080";
+const UrlPrefix = "http://192.168.82.42:8080";
 export async function fetchFlashcards(
   deckname: string
 ): Promise<Result<Flashcard[]>> {
@@ -54,7 +54,6 @@ export async function updateMultipleFlashcards(
       if (error !== null) {
         return error;
       }
-      
     }
     return null;
   } catch (error) {
@@ -94,16 +93,16 @@ export async function updateFlashcards(
 ): Promise<Error | null> {
   const response = await fetch(
     UrlPrefix +
-      (isUpdatePayload(payload)
-        ? "/api/flashcards/update"
-        : "/api/flashcards/decks/update"),
+    (isUpdatePayload(payload)
+      ? "/api/flashcards/update"
+      : "/api/flashcards/decks/update"),
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-      credentials:"include"
+      credentials: "include",
     }
   );
 
@@ -148,7 +147,7 @@ export async function updateDecks(newDeckName: string): Promise<Error | null> {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials:"include",
+      credentials: "include",
       body: JSON.stringify({ Deckname: newDeckName }),
     });
 
@@ -178,7 +177,7 @@ export async function promptRequest(
   const response = await fetch(UrlPrefix + "/api/flashcards/ai-generated", {
     method: "POST",
     body: formData,
-    credentials:"include"
+    credentials: "include",
   });
   if (!response.ok) {
     if (response.status == 401) {
@@ -240,7 +239,7 @@ export async function registerRequest(
       body: JSON.stringify(payload),
     });
     return response.status;
-    //it should return 202 if successfull
+    //it should return 201 if successfull
   } catch (error) {
     console.log(error);
     return 0;
@@ -256,11 +255,34 @@ export async function loginRequest(payload: LoginPayload): Promise<number> {
       body: JSON.stringify(payload),
       credentials: "include", // This is important to include cookies in the request
     });
-    alert(await response.text())
+    alert(await response.text());
     //it should return 202 if login is successfull
     return response.status;
-  } catch (error ) {
+  } catch (error) {
     console.log(error);
     return 0;
   }
+}
+export async function sendFeedback(
+  answer: string,
+  feedback: string
+): Promise<Error | null> {
+  const formData = new FormData();
+  formData.append("answer", answer);
+  formData.append("feedback", feedback);
+
+  const response = await fetch(UrlPrefix + "/api/feedback", {
+    method: "POST",
+    body: formData,
+    credentials: "include",
+  });
+  if (!response.ok) {
+    if (response.status == 401) {
+      return new Error("go back to auth");
+    }
+
+    alert("Request error:" + (await response.text()));
+    return new Error(`HTTP error! status: ${response.status}`);
+  }
+  return null;
 }

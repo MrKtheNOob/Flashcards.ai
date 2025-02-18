@@ -1,4 +1,5 @@
-import "../styles/FlipCard.css"; // Assuming styles are in this file
+import "../styles/FlipCard.css";
+
 import { useState } from "react";
 import Button from "./Button";
 interface FlipCardProps {
@@ -13,7 +14,7 @@ export default function FlipCard({ front, back, onChange }: FlipCardProps) {
   const handleFlip = () => {
     setIsFlipped(!isFlipped); // Toggle the flipped state
   };
-  const slidePreviousAnimation=(element:HTMLElement)=>{
+  const slidePreviousAnimation = (element: HTMLElement) => {
     setTimeout(() => {
       element.classList.remove("slide-out-back");
       element.classList.add("slide-in-back");
@@ -23,7 +24,7 @@ export default function FlipCard({ front, back, onChange }: FlipCardProps) {
       onChange(false);
     }, 400);
   }
-  const slideNextAnimation=(element:HTMLElement)=>{
+  const slideNextAnimation = (element: HTMLElement) => {
     setTimeout(() => {
       element.classList.remove("slide-out");
       element.classList.add("slide-in");
@@ -66,9 +67,8 @@ export default function FlipCard({ front, back, onChange }: FlipCardProps) {
       <div className="flip-container" id="flip-container" onClick={handleFlip}>
         <div
           id="flip-card"
-          className={`border border-4 border-black flip-card rounded ${
-            isFlipped ? "flipped" : ""
-          }`}
+          className={`border border-4 border-black flip-card rounded ${isFlipped ? "flipped" : ""
+            }`}
         >
           <div className="flip-card-front">
             <h5 style={{ fontSize: "3em" }}>{front}</h5>
@@ -79,17 +79,24 @@ export default function FlipCard({ front, back, onChange }: FlipCardProps) {
         </div>
       </div>
       <div className="buttons">
-        <Button
-          textContent="<= Previous Card"
-          onClick={handleSlidePrevious}
-          type={"normal"}
-        />
-        <Button textContent="Turn Card" onClick={handleFlip} type={"normal"} />
-        <Button
-          textContent="Next Card =>"
-          onClick={handleSlideNext}
-          type={"normal"}
-        />
+        <div id="button1">
+          <Button
+            textContent="<= Précédent"
+            onClick={handleSlidePrevious}
+            type={"normal"}
+          />
+        </div>
+        <div id="button2">
+          <Button textContent="Turn Card" onClick={handleFlip} type={"normal"} />
+        </div>
+        <div id="button3">
+          <Button
+            textContent="Suivant"
+            onClick={handleSlideNext}
+            type={"normal"}
+          />
+        </div>
+
       </div>
     </>
   );

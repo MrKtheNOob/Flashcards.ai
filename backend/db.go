@@ -333,3 +333,13 @@ func (db *DatabaseManager) ChangeUsername(userID int, newUsername string) error 
 	}
 	return nil
 }
+func (db *DatabaseManager) saveFeedback(answer string, feedbackText string, userID int) error {
+	query := "INSERT INTO Feedback3 (answer,feedback,user_id) VALUES (?,?,?)"
+	_, err := db.DB.Exec(query, answer, feedbackText, userID)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	fmt.Printf("Feedback Added :{answer:%s,feedback:%s,user_id:%d\n", answer, feedbackText, userID)
+	return nil
+}

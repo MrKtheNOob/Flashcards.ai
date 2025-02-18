@@ -83,7 +83,7 @@ export default function Alert({ children, onClose }: AlertProps) {
                 onClick={handleCloseButton}
                 style={{ position: "relative", left: "90%" }}
               ></button>
-              <div className="card-body">{children}</div>
+              <div className="card-body" style={{textAlign:"center"}}>{children}</div>
             </div>
           </div>
         </>

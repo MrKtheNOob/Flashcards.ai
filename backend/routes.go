@@ -50,11 +50,17 @@ func SetupRoutes(router *http.ServeMux, db *DatabaseManager) {
 	router.HandleFunc("OPTIONS /api/login", func(w http.ResponseWriter, r *http.Request) {
 		loginHandler(w, r, db)
 	})
+	router.HandleFunc("POST /api/feedback", Middleware(func(w http.ResponseWriter, r *http.Request) {
+		sendFeedbackHandler(w, r, db)
+	}, db))
+	router.HandleFunc("OPTIONS /api/feedback", func(w http.ResponseWriter, r *http.Request) {
+		HandlePreflightRequest(w, r)
+	})
 	router.HandleFunc("POST /api/logout", Middleware(logoutHandler, db))
 	router.HandleFunc("OPTIONS /api/logout", Middleware(logoutHandler, db))
 
 	// Define the path to the frontend folder
-	frontendPath := "../frontend"
+	frontendPath := "../dist"
 
 	router.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(filepath.Join(frontendPath, "assets")))))
 

@@ -22,8 +22,8 @@ export default function Menu() {
   const [selected, changeSelected] = useState<boolean>(false);
   const [isEditing, changeEditState] = useState<boolean>(false);
   const [errorState, setErrorState] = useState<boolean>(false);
-  const [cards,setCards]   = useState<ReactNode[]>([]);
-  const [loading,setLoading]=useState<boolean>(true)
+  const [cards, setCards] = useState<ReactNode[]>([]);
+  const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate();
   const HandlegoToAIPageButton = () => {
     navigate("/flashcards/ai-generated  ");
@@ -37,7 +37,7 @@ export default function Menu() {
   };
   if (!fetched)
     fetchFlashcards(id ? id : "").then((result) => {
-      if (result.error?.message=="go back to auth"){
+      if (result.error?.message == "go back to auth") {
         console.log("Not logged in ,going back to auth")
         navigate("/authpage");
       }
@@ -47,14 +47,14 @@ export default function Menu() {
       setfetch(true);
       setLoading(false)
     });
-    
+
   const handleAddCard = (front: string, back: string) => {
     // Add a new flashcard with default content
     if (front === "" || back === "") {
       changeEditState(false);
       return;
     }
-    const newCard: Flashcard = { Front: front,Back: back };
+    const newCard: Flashcard = { Front: front, Back: back };
     setFlashcardData([...flashcardData, newCard]);
     update(newCard);
     changeEditState(false);
@@ -69,7 +69,7 @@ export default function Menu() {
   }, [selected]);
   const handleDeleteCard = useCallback((flashcardToRemove: Flashcard) => {
     //send delete request
-    deleteFlashcard({FlashcardToRemove:flashcardToRemove,deckname:id??""}).then((error) => {
+    deleteFlashcard({ FlashcardToRemove: flashcardToRemove, deckname: id ?? "" }).then((error) => {
       if (error) {
         console.log(error);
         setErrorState(true);
@@ -86,11 +86,8 @@ export default function Menu() {
     );
   }, [flashcardData, id]);
 
-  //TODO:add a round button centered horizontaly at the bottom of the screen that should say
-  //  to start the exercice
-  
   const mapFlashcards = useCallback(() => {
-    const newCards = flashcardData.map((flashcard,index) => (
+    const newCards = flashcardData.map((flashcard, index) => (
       <Card
         key={index} // Assuming each flashcard has a unique id
         front={flashcard.Front}
@@ -121,7 +118,7 @@ export default function Menu() {
           <h1>Resquest error</h1>
         </Alert>
       )}
-      <h1 className="text-center" style={{color:"white"}}>{id} Flashcards</h1>
+      <h1 className="text-center" style={{ color: "white" }}>{id} Flashcards</h1>
       <>
         <div style={{ textAlign: "center" }} className={"other tools"}>
           <Button
@@ -129,30 +126,26 @@ export default function Menu() {
             textContent="Creer Flashcards avec l'IA"
             onClick={HandlegoToAIPageButton}
           />
-          <Button
-            type="normal"
-            textContent="Cree flashcard avec l'IA"
-            onClick={()=>{window.location.href="/flashcards/ai-generated"}}
-          />
+
         </div>
-        {flashcardData.length >0 && (
+        {flashcardData.length > 0 && (
           <div className="to-exercice">
-          <Button
-            textContent="Start Exercice"
-            type="normal"
-            onClick={() => {
-              navigate("/decks/" + id + "/learn");
-            }}
-          />
-        </div>
+            <Button
+              textContent="Exercez vous"
+              type="normal"
+              onClick={() => {
+                navigate("/decks/" + id + "/learn");
+              }}
+            />
+          </div>
         )}
-        
+
         <br />
-        
+
         <div className="flashcard-grid">
-          <div style={{textAlign:"center"}}>{loading&&<Loading type="circle"/>}</div>
-        
-          {cards.length == 0 ? <h1>There are No cards</h1> : cards}
+          {loading && <div style={{ textAlign: "center" }}><Loading type="circle" /></div>}
+
+          {fetched && cards.length == 0 ? <h1>There are No cards</h1> : cards}
           <AddCard onClick={() => changeEditState(true)} />
         </div>
       </>

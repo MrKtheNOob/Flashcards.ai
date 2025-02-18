@@ -1,0 +1,12 @@
+@media (max-width:1000px) {
+    /*style={{ color: "black", width: "40em", height: "30em" }}*/
+    body{
+        overflow: hidden; 
+    }
+    form{
+        min-width: fit-content;
+    }
+    textarea{
+        max-width:20em
+    }    
+}

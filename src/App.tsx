@@ -8,11 +8,9 @@ import Exercise from "./pages/Excercise";
 import GenerateFlashcards from "./pages/GenerateFlashcards";
 import Quiz from "./pages/Quiz";
 import AuthPage from "./pages/AuthPage";
+import Feedback from "./pages/Feedback";
 
 export default function App() {
-  setTimeout(() => {
-    console.log("hey")
-  }, 100);
   return (
     <>
       <BrowserRouter>
@@ -24,6 +22,7 @@ export default function App() {
           <Route path="/decks/:id/learn" element={<Exercise />} />
           <Route path="/decks/:id/quiz" element={<Quiz/>}/>
           <Route path="/flashcards/ai-generated" element={<GenerateFlashcards/>}/>
+          <Route path="/feedback" element={<Feedback/>}/>
           <Route path="*" element={<Error404 />} />
           <Route path="/authpage" element={<AuthPage />} />
         </Routes>

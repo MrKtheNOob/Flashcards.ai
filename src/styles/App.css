@@ -50,7 +50,7 @@ body{
     }
     .edit-btns{
         gap:10px;
-        right:10%
+        right:3px;
     }
 }
 .to-exercice{
