@@ -11,7 +11,7 @@ export default function Header({ selectedPage }: HeaderProps) {
       <nav className="navbar" style={{ width: "100%" }}>
         <h1 className="title">
           <Link to="/" style={{paddingLeft:"11px"}}>
-            Flashcards.ai
+            MetaFlashcards
             <span style={{ fontSize: "20px", color: "blue",position:"absolute" }}>Beta</span>
           </Link>
         </h1>
