@@ -456,13 +456,6 @@ func sendFeedbackHandler(w http.ResponseWriter, r *http.Request, db *DatabaseMan
 		return
 	}
 	UserID := r.Context().Value("userID").(int)
-	fmt.Println(UserID)
-	fmt.Println(UserID)
-	fmt.Println(UserID)
-	fmt.Println(UserID)
-	fmt.Println(UserID)
-	fmt.Println(UserID)
-	fmt.Println(UserID)
 	fmt.Println("UserID:", UserID)
 	answer := r.FormValue("answer")
 	fmt.Println("Answer:", answer)

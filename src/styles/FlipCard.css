@@ -1,6 +1,7 @@
 body{
-  overflow: hidden;
+  overflow: auto;
 }
+
 /* Animations */
 @keyframes slide-out {
   0% {
@@ -38,8 +39,11 @@ body{
   }
 }
 /* End of Animations */
-
+.body{
+  overflow: auto;
+}
 .flip-card {
+  left: 5%;
   position: relative;
   text-align: center;
   height: 600px;
@@ -108,8 +112,10 @@ body{
 }
 @media (max-width: 1000px) {
   .flip-card {
+    position: relative;
+    
     height: 50em;
-    width: 50em;
+    width: 45em;
   }
   .flip-container{
     font-size: .5em;
@@ -127,11 +133,11 @@ body{
   #button1{
     position: absolute;
     left: 0;
-    bottom:10%
+    bottom:5%
   }
   #button3{
     position: absolute;
     right: 0;
-    bottom:10%
+    bottom:5%
   }
 }

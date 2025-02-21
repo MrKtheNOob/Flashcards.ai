@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import Header from "../components/Header";
 import ParticlesComponent from "../components/ParticlesBackground";
 import { useNavigate } from "react-router-dom";
-import "../styles/feedback.module.css"
+import "../styles/feedback.css"
 export default function Feedback() {
   const yesRef=useRef<HTMLInputElement>(null);
   const noRef=useRef<HTMLInputElement>(null);
@@ -73,7 +73,6 @@ export default function Feedback() {
               />
             </label>
           </div>
-
           <br />
           <br />
           <br />

@@ -1,7 +1,7 @@
-
 nav{
   background-color: white;
 }
+
 .title{
   color:black;
   position: relative;
@@ -34,6 +34,10 @@ a {
     font-size: 1.4rem;
     left: 5%;
   }
+  .navbar{
+    flex-direction: column;
+    align-items: center;
+  }
 
 }
 
@@ -41,6 +45,7 @@ a {
   font-size: 1.1em;
   position: relative;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   width: 100%;
   top: 0;

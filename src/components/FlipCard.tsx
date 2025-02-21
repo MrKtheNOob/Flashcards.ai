@@ -81,13 +81,13 @@ export default function FlipCard({ front, back, onChange }: FlipCardProps) {
       <div className="buttons">
         <div id="button1">
           <Button
-            textContent="<= Précédent"
+            textContent="Précédent"
             onClick={handleSlidePrevious}
             type={"normal"}
           />
         </div>
         <div id="button2">
-          <Button textContent="Turn Card" onClick={handleFlip} type={"normal"} />
+          <Button textContent="Tourner" onClick={handleFlip} type={"normal"} />
         </div>
         <div id="button3">
           <Button

@@ -13,7 +13,7 @@ export type Result<T> = {
   error: Error | null;
 };
 
-const UrlPrefix = "";
+const UrlPrefix = "http://10.14.7.121:8080";
 export async function fetchFlashcards(
   deckname: string
 ): Promise<Result<Flashcard[]>> {
