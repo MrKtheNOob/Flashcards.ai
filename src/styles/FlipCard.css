@@ -1,11 +1,11 @@
 body{
   overflow: auto;
 }
-
+/* Imma need to change the animation mechnanics, they make the phone crash its navigator */
 /* Animations */
 @keyframes slide-out {
   0% {
-    right: 0px;
+    transform: translateX(-10%);
   }
   100% {
     right: 1000px;
@@ -43,11 +43,9 @@ body{
   overflow: auto;
 }
 .flip-card {
-  left: 5%;
   position: relative;
-  text-align: center;
   height: 600px;
-  width: 90%;
+  width:80%;
   transform-style: preserve-3d;
   transition: transform 0.4s;
 }
@@ -113,7 +111,7 @@ body{
 @media (max-width: 1000px) {
   .flip-card {
     position: relative;
-    
+    left:5%;
     height: 50em;
     width: 45em;
   }

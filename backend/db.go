@@ -292,17 +292,27 @@ func (db *DatabaseManager) GetDecks() ([]Deck, error) {
 	return users, rows.Err()
 }
 
-func (db *DatabaseManager) ChangeDeckName(deckID int, newName string) error {
-	deck, err := db.GetDecksByUserID(deckID)
-	if !(deck != nil && err != nil) {
-		return errDeckDoesNotExist
-	}
-	query := "UPDATE Decks SET name = ? WHERE id= ?"
-	_, err = db.DB.Exec(query, newName, deckID)
+// There is room for optimisation here
+func (db *DatabaseManager) ChangeDeckName(userID int, oldName string, newName string) error {
+	fmt.Printf("Changing deck of name %s to %s for user if id %d\n", oldName, newName, userID)
+	decks, err := db.GetDecksByUserID(userID)
 	if err != nil {
-		return fmt.Errorf("%s %s", queryErrorPrefix, err.Error())
+		log.Println(err)
+		return err
 	}
-	return nil
+	for _, deck := range decks {
+		if deck.Name == oldName {
+			query := "UPDATE Decks SET name = ? WHERE id= ?"
+			_, err = db.DB.Exec(query, newName, deck.ID)
+			if err != nil {
+				log.Println(err)
+				return fmt.Errorf("%s %s", queryErrorPrefix, err.Error())
+			}
+			log.Printf("Deck of name %s changed to %s for user of id %d\n", oldName, newName, userID)
+			return nil
+		}
+	}
+	return errDeckDoesNotExist
 }
 func (db *DatabaseManager) EditFlashcard(deckID int, front string, back string, newFront string, newBack string) error {
 	// Check if the deck ID exists

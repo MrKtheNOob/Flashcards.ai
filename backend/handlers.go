@@ -17,8 +17,9 @@ import (
 )
 
 func HandlePreflightRequest(w http.ResponseWriter, r *http.Request) bool {
+	fmt.Println("Handling preflight request")
 	w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
-	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS")
+	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS,PUT")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, Access-Control-Allow-Credentials")
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	if r.Method == http.MethodOptions {
@@ -98,7 +99,7 @@ func promptHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	err = savePromptAndResponse(input, promptResponse)
 	if err != nil {
-		http.Error(w, "Error saving prompt response", http.StatusInternalServerError)
+		log.Println("Error saving prompt response")
 		return
 	}
 	// Formatting the response
@@ -113,11 +114,8 @@ func promptHandler(w http.ResponseWriter, r *http.Request) {
 
 func handleUpdateDecks(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
 	log.Println("Connection to api/flashcards/decks/update from", r.RemoteAddr)
-	fmt.Println("Handling update decks request")
+	userID := r.Context().Value("userID").(int)
 
-	// userID := r.Context().Value("userID").(int)
-
-	userID := 4
 	var payload struct{ DeckName string }
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
@@ -137,30 +135,57 @@ func handleUpdateDecks(w http.ResponseWriter, r *http.Request, db *DatabaseManag
 		fmt.Println("Update decks request handled successfully")
 		return
 	}
-	//if the request is not DELETE its POST
-	err = db.CreateDeck(userID, payload.DeckName)
-	if err != nil {
-		if err == errDeckAlreadyExists {
-			http.Error(w, err.Error(), http.StatusConflict)
-			log.Println(err.Error())
-		} else {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			log.Println(err.Error())
+
+	if r.Method == http.MethodPost {
+		err = db.CreateDeck(userID, payload.DeckName)
+		if err != nil {
+			if err == errDeckAlreadyExists {
+				http.Error(w, err.Error(), http.StatusConflict)
+				log.Println(err.Error())
+			} else {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				log.Println(err.Error())
+			}
+			return
 		}
-		return
+		w.WriteHeader(http.StatusCreated)
+		log.Printf("Deck %s has been created\n/flashcards/decks/update success\n", payload.DeckName)
 	}
 
-	w.WriteHeader(http.StatusCreated)
-	log.Printf("Deck %s has been created\n/flashcards/decks/update success\n", payload.DeckName)
 	fmt.Println("Update decks request handled successfully")
 }
+func ChangeDeckNameHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
+	log.Println("Connection to api/flashcards/decks/update from", r.RemoteAddr)
+	userID := r.Context().Value("userID").(int)
 
+	var payload struct {
+		OldName string
+		NewName string
+	}
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		log.Println(err)
+		return
+	}
+	err = db.ChangeDeckName(userID, payload.OldName, payload.NewName)
+	if err != nil {
+		log.Println(err)
+		if err == errDeckDoesNotExist {
+			http.Error(w, fmt.Sprintf("deck of name %s does not exist", payload.OldName), http.StatusNotFound)
+			return
+		}
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	log.Println("Put request handled successfully")
+}
 func addFlashcardHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
 	fmt.Println("Connection to /flashcards/update from", r.RemoteAddr)
 	fmt.Println("Handling add flashcard request")
 
-	// userID := r.Context().Value("userID").(int)
-	userID := 4
+	userID := r.Context().Value("userID").(int)
 
 	var payload Payload
 	err := json.NewDecoder(r.Body).Decode(&payload)
@@ -197,8 +222,7 @@ func deleteFlashcardHandler(w http.ResponseWriter, r *http.Request, db *Database
 	fmt.Println("Connection to /flashcards/delete from", r.RemoteAddr)
 	fmt.Println("Handling delete flashcard request")
 
-	// userID := r.Context().Value("userID").(int)
-	userID := 4
+	userID := r.Context().Value("userID").(int)
 
 	var payload struct {
 		FlashcardToRemove Flashcard
@@ -307,7 +331,6 @@ var store = sessions.NewCookieStore([]byte("your-secret-key"))
 
 // Middleware to check if the user is authenticated
 func Middleware(next http.HandlerFunc, db *DatabaseManager) http.HandlerFunc {
-	fmt.Println("Middleware triggered")
 	return func(w http.ResponseWriter, r *http.Request) {
 		if HandlePreflightRequest(w, r) {
 			return // Exit early if the preflight request was handled

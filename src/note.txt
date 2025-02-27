@@ -32,19 +32,17 @@ when response is 401 then navigate to the auth page to log in
 if the user goes to /decks and it is not logged in it should g back to the auth page
 change the options request handlers to take handlePreflightRequest instead
 when you see a problem with a route ,compare it to another route that does about the same job 
-add .module to the css files to make them scoped so there is no conflic between compoennt styles (there are rn )
-Add a page where users can criticise the app 
 put the link pointing to the page on the navbar
-DO IT RN: make the brand in header compoennt an a tag that points to the home page and remove the home 
-a tag since its gonna be redundant , there is only gonna be the deck tab and the feedback tab 
-    feedback tab : man this a whole other thing , 
-        there is the text area + submit but then the comments that I want to be displayed under 
-        di the first and do the rest after deployment 
+
+I am so dumb , when the user goes from flashcards menu to exercice , instead of fetching the falshcards data 2 times
+make exercice take those flashcards as a prop to the exercice component
+
+make the decks responsive in the create with AI page
 we are so close to finshing this thing 
 make sure the loading animation are on point 
 verify the delete card feature ,there seem to be some cors issue perhaps
 verify if the user is redirected to the aut page if not logged in from the gen ai page 
-setup .env
+
 i think that's it 
 build it and deploy as beta 
 we'll see

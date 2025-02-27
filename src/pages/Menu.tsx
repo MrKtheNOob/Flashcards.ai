@@ -8,7 +8,6 @@ import {
   fetchFlashcards,
   updateFlashcards,
 } from "../APIMethods";
-import Alert from "../components/Alert";
 import Header from "../components/Header";
 import { useNavigate, useParams } from "react-router-dom";
 import AddCard from "../components/AddCard";
@@ -21,7 +20,6 @@ export default function Menu() {
   const [fetched, setfetch] = useState<boolean>(false);
   const [selected, changeSelected] = useState<boolean>(false);
   const [isEditing, changeEditState] = useState<boolean>(false);
-  const [errorState, setErrorState] = useState<boolean>(false);
   const [cards, setCards] = useState<ReactNode[]>([]);
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate();
@@ -31,9 +29,9 @@ export default function Menu() {
   const update = (newFlashcard: Flashcard) => {
     updateFlashcards({ deckname: id, flashcard: newFlashcard }).then(
       (error) => {
-        if (error) console.log(error);
+        if (error) console.log(error); alert(error);
       }
-    ); //make this an alert in the future
+    );
   };
   if (!fetched)
     fetchFlashcards(id ? id : "").then((result) => {
@@ -69,21 +67,24 @@ export default function Menu() {
   }, [selected]);
   const handleDeleteCard = useCallback((flashcardToRemove: Flashcard) => {
     //send delete request
-    deleteFlashcard({ FlashcardToRemove: flashcardToRemove, deckname: id ?? "" }).then((error) => {
+    deleteFlashcard({ FlashcardToRemove: flashcardToRemove, deckname: id ?? "" })
+    .then((error) => {
       if (error) {
         console.log(error);
-        setErrorState(true);
+        alert(error)
         return;
+      } else {
+        window.location.reload()
       }
     });
 
-    setFlashcardData(
-      flashcardData.filter(
-        (flashcard: Flashcard) =>
-          flashcard.Front !== flashcardToRemove.Front &&
-          flashcard.Back !== flashcardToRemove.Back
-      )
-    );
+    //setFlashcardData(
+      //   flashcardData.filter(
+      //     (flashcard: Flashcard) =>
+      //       flashcard.Front !== flashcardToRemove.Front &&
+      //       flashcard.Back !== flashcardToRemove.Back
+      //   )
+      // );
   }, [flashcardData, id]);
 
   const mapFlashcards = useCallback(() => {
@@ -109,15 +110,6 @@ export default function Menu() {
       <Header selectedPage="decks" />
       <ParticlesComponent />
       {isEditing && <CardEditor textLabel="Add card" onSave={handleAddCard} />}
-      {errorState && (
-        <Alert
-          onClose={() => {
-            setErrorState(false);
-          }}
-        >
-          <h1>Resquest error</h1>
-        </Alert>
-      )}
       <h1 className="text-center" style={{ color: "white" }}>{id} Flashcards</h1>
       <>
         <div style={{ textAlign: "center" }} className={"other tools"}>

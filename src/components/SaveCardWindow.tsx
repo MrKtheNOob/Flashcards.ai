@@ -38,7 +38,7 @@ export default function SaveCardWindow({
         if (response) {
           alert(response);
         } else {
-          alert("Cards saved successfully");
+          alert(`Flashcards enregistrées dans le set nommé ${deckname}`);
           window.location.href="/decks"
         }
       });
@@ -88,7 +88,7 @@ export default function SaveCardWindow({
         alert(response);
       } else {
         onCreatedDeck();
-        alert("Deck created successfully");
+        alert("Set créé");
       }
     }).then(()=>{
       const cardsToAdd:UpdatePayload[]=newCards.map((newCard)=>{
@@ -146,9 +146,12 @@ export default function SaveCardWindow({
           </>
         ) : (
           <>
-            <h1 style={{color:"black"}}>Choose in what deck to save your new cards</h1>
+            <h1 style={{color:"black"}}>Choisissez dans quel Set enregistrer les nouvelles flashcards</h1>
             <br />
-            {decks}
+            <div className="d-flex flex-wrap d-sm-grid d-md-grid d-lg-grid grid-cols-2 grid-cols-md-3 grid-cols-lg-4">
+              {decks}
+            </div>
+            
           </>
         )}
       </div>

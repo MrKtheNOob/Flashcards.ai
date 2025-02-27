@@ -12,8 +12,17 @@ export type Result<T> = {
   data: T | null;
   error: Error | null;
 };
-
-const UrlPrefix = "http://10.14.7.121:8080";
+export type UpdatePayload = {
+  deckname: string | undefined;
+  flashcard: Flashcard;
+};
+export type RegisterPayload = {
+  email: string;
+  username: string;
+  password: string;
+  cpassword: string;
+};
+const UrlPrefix = "";
 export async function fetchFlashcards(
   deckname: string
 ): Promise<Result<Flashcard[]>> {
@@ -38,6 +47,7 @@ export async function fetchFlashcards(
       };
   }
 }
+
 export async function updateMultipleFlashcards(
   payloads: UpdatePayload[]
 ): Promise<Error | null> {
@@ -63,6 +73,7 @@ export async function updateMultipleFlashcards(
 export async function deleteDeck(deckname: string): Promise<Error | null> {
   const response = await fetch(UrlPrefix + "/api/flashcards/decks/update", {
     method: "DELETE",
+    credentials:"include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -79,10 +90,7 @@ export async function deleteDeck(deckname: string): Promise<Error | null> {
   }
   return null;
 }
-export type UpdatePayload = {
-  deckname: string | undefined;
-  flashcard: Flashcard;
-};
+
 function isUpdatePayload(
   payload: UpdatePayload | { Deckname: string }
 ): boolean {
@@ -138,6 +146,31 @@ export async function fetchDecks(): Promise<Result<string[]>> {
     alert("Request error:" + error);
 
     return { data: null, error: error as Error };
+  }
+}
+export async function changeDeckNameRequest(oldName:string,newName:string):Promise<Error|null>{
+  try {
+    const response = await fetch(UrlPrefix + "/api/flashcards/decks/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ OldName:oldName,NewName:newName }),
+    });
+
+    if (!response.ok) {
+      if (response.status == 401) {
+        return new Error("go back to auth");
+      }
+      return new Error(
+        `HTTP error! status: ${response.status} text:${await response.text()}`
+      );
+    }
+    return null;
+  } catch (error) {
+    alert("Request error:" + error);
+    return new Error(`Error when making PUT request ${error}`);
   }
 }
 export async function updateDecks(newDeckName: string): Promise<Error | null> {
@@ -202,6 +235,7 @@ export async function deleteFlashcard(payload: {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials:"include",
       body: JSON.stringify(payload),
     });
     if (!response.ok) {
@@ -220,12 +254,7 @@ export async function deleteFlashcard(payload: {
     return new Error(`Error when making DELETE request ${error}`);
   }
 }
-export type RegisterPayload = {
-  email: string;
-  username: string;
-  password: string;
-  cpassword: string;
-};
+
 export type LoginPayload = { username: string; password: string };
 export async function registerRequest(
   payload: RegisterPayload

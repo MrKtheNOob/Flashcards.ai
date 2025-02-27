@@ -44,7 +44,7 @@ const (
 	flashcardsFilePath = "./FlashcardData.json"
 	promptPrefix       = "Generate educational flashcards in french from the following content. Each flashcard should include:A 'front' field with a question summarizing a key concept.A 'back' field with a concise explanation or definition answering the question.Output the flashcards as a JSON array, with each flashcard as an object containing the 'front' and 'back' attributes. Use clear, factual language and keep the responses concise . Here is the content to process:"
 	logsFilePath       = "./prompt_logs.json"
-	allowedOrigin      = "http://10.14.7.121:5173"
+	allowedOrigin      = "http://10.14.7.123:5173"
 )
 
 func main() {

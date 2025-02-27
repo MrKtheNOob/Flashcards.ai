@@ -46,7 +46,7 @@ export default function Decks() {
       return <div style={{textAlign:"center"}}><Loading type="circle"/></div>
     } else if (!loading && decks.length > 0) {
       return <>
-        {decks.map((deck, index) => <Deck key={index} title={deck} onDelete={() => {setEditState(false) }} />)}
+        {decks.map((deck, index) => <Deck key={index} title={deck} onDelete={async() => {window.location.reload()}} />)}
       </>
     } else {
       return <h1 style={{ textAlign: "center", paddingTop: "25%" }}></h1>
@@ -57,7 +57,7 @@ export default function Decks() {
     const inputValue = inputRef.current?.value;
     if (!inputValue) {
       // I want in the future for these alerts to be text in the dialog box in red
-      alert("Deck name cannot be empty");
+      alert("Le nom du set ne peut pas etre vide");
       return;
     }
     updateFlashcards({ Deckname: inputValue ?? "" }).then((error) => {
@@ -66,7 +66,7 @@ export default function Decks() {
           navigate("/authpage");
         }
       } else {
-        alert("Deck created successfully");
+        alert("Vous avez créé un Set")
         window.location.reload()
       }
     });

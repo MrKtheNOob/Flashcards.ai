@@ -26,19 +26,19 @@ export default function FlipCard({ front, back, onChange }: FlipCardProps) {
   }
   const slideNextAnimation = (element: HTMLElement) => {
     setTimeout(() => {
+
       element.classList.remove("slide-out");
       element.classList.add("slide-in");
       setTimeout(() => {
         element.classList.remove("slide-in");
-      }, 400);
+      }, 1000);
       onChange(true);
-    }, 400);
+    }, 0);
   }
   const handleSlideNext = () => {
     if (element) {
-      if (element.classList.contains("flipped")) {
+      if (element.classList.contains("flipped")) {//this kinda looks ridiculous , just check the state variable !
         setIsFlipped(false);
-
         setTimeout(() => {
           element.classList.add("slide-out");
         }, 200);
