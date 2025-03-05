@@ -26,7 +26,6 @@ export default function FlipCard({ front, back, onChange }: FlipCardProps) {
   }
   const slideNextAnimation = (element: HTMLElement) => {
     setTimeout(() => {
-
       element.classList.remove("slide-out");
       element.classList.add("slide-in");
       setTimeout(() => {

@@ -5,7 +5,7 @@ body{
 /* Animations */
 @keyframes slide-out {
   0% {
-    transform: translateX(-10%);
+    right: 0;
   }
   100% {
     right: 1000px;
