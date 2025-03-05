@@ -63,6 +63,7 @@ func (db *DatabaseManager) SaveToLogs(prompt, response string) error {
 	query := "INSERT INTO Logs (prompt,response) VALUES (?,?)"
 	_, err := db.DB.Exec(query, prompt, response)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	return nil
@@ -214,7 +215,7 @@ func (db *DatabaseManager) GetDecksByUserID(userID int) ([]Deck, error) {
 		return nil, fmt.Errorf("error iterating over rows: %v", err)
 	}
 	if len(decks) == 0 {
-		return []Deck{}, nil
+		return nil, nil
 	}
 
 	return decks, nil
@@ -314,20 +315,33 @@ func (db *DatabaseManager) ChangeDeckName(userID int, oldName string, newName st
 	}
 	return errDeckDoesNotExist
 }
-func (db *DatabaseManager) EditFlashcard(deckID int, front string, back string, newFront string, newBack string) error {
-	// Check if the deck ID exists
-	deck, err := db.GetDecksByUserID(deckID)
-	if !(deck != nil && err != nil) {
-		return errDeckDoesNotExist
+func (db *DatabaseManager) EditFlashcard(userID int, deckname string, front string, back string, newFront string, newBack string) error {
+	// Fetch the deck by name
+	deck, err := db.GetDeckByName(deckname, userID)
+	if err != nil {
+		return err
 	}
+
 	// Update the flashcard
-	query := "UPDATE Flashcards SET front = ?, back = ? WHERE deck_id = ? AND front = ? AND back = ?"
-	_, err = db.DB.Exec(query, newFront, newBack, deckID, front, back)
+	updateQuery := "UPDATE Flashcards SET front = ?, back = ? WHERE deck_id = ? AND front = ? AND back = ?"
+	result, err := db.DB.Exec(updateQuery, newFront, newBack, deck.ID, front, back)
 	if err != nil {
 		return fmt.Errorf("%s %s", queryErrorPrefix, err.Error())
 	}
+
+	// Check how many rows were affected
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error checking rows affected: %s", err.Error())
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("update did not persist. No flashcard found with front='%s' and back='%s'", front, back)
+	}
+
 	return nil
 }
+
 func (db *DatabaseManager) ChangeUsername(userID int, newUsername string) error {
 	user, err := db.CheckIfUserExists(userID)
 	if err != nil {

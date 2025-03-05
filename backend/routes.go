@@ -21,7 +21,7 @@ func SetupRoutes(router *http.ServeMux, db *DatabaseManager) {
 		handleUpdateDecks(w, r, db)
 	}, db))
 	router.HandleFunc("PUT /api/flashcards/decks/update", Middleware(func(w http.ResponseWriter, r *http.Request) {
-		ChangeDeckNameHandler(w, r, db)
+		changeDeckNameHandler(w, r, db)
 	}, db))
 	router.HandleFunc("DELETE /api/flashcards/decks/update", Middleware(func(w http.ResponseWriter, r *http.Request) {
 		handleUpdateDecks(w, r, db)
@@ -30,7 +30,10 @@ func SetupRoutes(router *http.ServeMux, db *DatabaseManager) {
 		handleUpdateDecks(w, r, db)
 	}, db))
 	router.HandleFunc("POST /api/flashcards/update", Middleware(func(w http.ResponseWriter, r *http.Request) {
-		addFlashcardHandler(w, r, db)
+		updateFlashcardsHandler(w, r, db)
+	}, db))
+	router.HandleFunc("PUT /api/flashcards/update", Middleware(func(w http.ResponseWriter, r *http.Request) {
+		updateFlashcardsHandler(w, r, db)
 	}, db))
 	router.HandleFunc("OPTIONS /api/flashcards/update", Middleware(func(w http.ResponseWriter, r *http.Request) {
 		addFlashcardHandler(w, r, db)

@@ -10,6 +10,7 @@ import Loading from "../components/Loading";
 import SaveCardWindow from "../components/SaveCardWindow";
 import { useNavigate } from "react-router-dom";
 
+
 export default function GenerateFlashcards() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [newCards, setNewCards] = useState<Flashcard[]>([]);
@@ -42,8 +43,7 @@ export default function GenerateFlashcards() {
       <Header selectedPage="decks" />
       <ParticlesComponent />
       <header className="text-center">
-        <h1 style={{color:"white"}}>Generate flashcards with AI</h1>
-        {!newCards && <h2>Enter text or course</h2>}
+        {newCards.length>1?<h1 style={{color:"white"}}>Flashcards générées</h1>:<h1 style={{color:"white"}}>Générez des flashcards avec l'IA</h1>}
       </header>
       <main className="text-center">
         {loading ? (
@@ -70,7 +70,7 @@ export default function GenerateFlashcards() {
         <div style={{ zIndex: 100 }}>
           {newCards.length > 0 ? (
             <Button
-              textContent="Save Card"
+              textContent="Sauvegarder"
               onClick={() => {
                 setSaveWindow(true);
               }}
@@ -79,7 +79,6 @@ export default function GenerateFlashcards() {
             <Button textContent="Submit" onClick={handleSubmit} />
           )}
         </div>
-
         {saveWindow && (
             <SaveCardWindow newCards={newCards} onCreatedDeck={handleOnCreated}/>
         )}

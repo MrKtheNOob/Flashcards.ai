@@ -59,3 +59,9 @@ Each flashcard should include:A 'front' field with a question summarizing a key 
 A 'back' field with a concise explanation or definition answering the question.
 Output the flashcards as a JSON array, with each flashcard as an object containing the 'front' and 'back' attributes.
 Use clear, factual language and keep the responses concise . Here is the content to process:
+
+
+
+I don't care ... A user can create 2 decks of the same name and its gonna corrupt the edit flashcard function
+
+

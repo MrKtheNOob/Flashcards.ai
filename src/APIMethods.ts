@@ -73,7 +73,7 @@ export async function updateMultipleFlashcards(
 export async function deleteDeck(deckname: string): Promise<Error | null> {
   const response = await fetch(UrlPrefix + "/api/flashcards/decks/update", {
     method: "DELETE",
-    credentials:"include",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -96,14 +96,15 @@ function isUpdatePayload(
 ): boolean {
   return "deckname" in payload && "flashcard" in payload;
 }
+//this contraption needs to be reworked
 export async function updateFlashcards(
   payload: UpdatePayload | { Deckname: string }
 ): Promise<Error | null> {
   const response = await fetch(
     UrlPrefix +
-    (isUpdatePayload(payload)
-      ? "/api/flashcards/update"
-      : "/api/flashcards/decks/update"),
+      (isUpdatePayload(payload)
+        ? "/api/flashcards/update"
+        : "/api/flashcards/decks/update"),
     {
       method: "POST",
       headers: {
@@ -148,7 +149,35 @@ export async function fetchDecks(): Promise<Result<string[]>> {
     return { data: null, error: error as Error };
   }
 }
-export async function changeDeckNameRequest(oldName:string,newName:string):Promise<Error|null>{
+
+export async function EditFlashcard(payload: {
+  Deckname: string;
+  old: Flashcard;
+  new: Flashcard;
+}): Promise<Error | null> {
+  const response = await fetch(UrlPrefix + "/api/flashcards/update", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    if (response.status == 401) {
+      return new Error("go back to auth");
+    }
+    return new Error(
+      `HTTP error! status: ${response.status} text:${await response.text()}`
+    );
+  }
+  return null;
+}
+export async function changeDeckNameRequest(
+  oldName: string,
+  newName: string
+): Promise<Error | null> {
   try {
     const response = await fetch(UrlPrefix + "/api/flashcards/decks/update", {
       method: "PUT",
@@ -156,7 +185,7 @@ export async function changeDeckNameRequest(oldName:string,newName:string):Promi
         "Content-Type": "application/json",
       },
       credentials: "include",
-      body: JSON.stringify({ OldName:oldName,NewName:newName }),
+      body: JSON.stringify({ OldName: oldName, NewName: newName }),
     });
 
     if (!response.ok) {
@@ -235,7 +264,7 @@ export async function deleteFlashcard(payload: {
       headers: {
         "Content-Type": "application/json",
       },
-      credentials:"include",
+      credentials: "include",
       body: JSON.stringify(payload),
     });
     if (!response.ok) {

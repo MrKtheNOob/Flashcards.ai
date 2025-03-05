@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"math/rand"
+
 	"net/http"
 	"os"
-	"strconv"
+
 	"strings"
 
 	"github.com/google/generative-ai-go/genai"
@@ -97,11 +97,12 @@ func promptHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error generating prompt response", http.StatusInternalServerError)
 		return
 	}
-	err = savePromptAndResponse(input, promptResponse)
-	if err != nil {
-		log.Println("Error saving prompt response")
-		return
-	}
+	go func() {
+		err = savePromptAndResponse(input, promptResponse)
+		if err != nil {
+			log.Println("Error saving prompt response")
+		}
+	}()
 	// Formatting the response
 	promptResponse = strings.Replace(promptResponse, "```json", "", 1)
 	promptResponse = strings.Replace(promptResponse, "```", "", 1)
@@ -112,10 +113,11 @@ func promptHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Prompt request handled successfully")
 }
 
+// Handles creating and deleting deck
 func handleUpdateDecks(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
 	log.Println("Connection to api/flashcards/decks/update from", r.RemoteAddr)
 	userID := r.Context().Value("userID").(int)
-
+	//Parse the request payload
 	var payload struct{ DeckName string }
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
@@ -123,8 +125,8 @@ func handleUpdateDecks(w http.ResponseWriter, r *http.Request, db *DatabaseManag
 		log.Println(err)
 		return
 	}
-
-	if r.Method == http.MethodDelete {
+	switch r.Method {
+	case http.MethodDelete:
 		err = db.DeleteDeck(payload.DeckName, userID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -134,9 +136,7 @@ func handleUpdateDecks(w http.ResponseWriter, r *http.Request, db *DatabaseManag
 		log.Printf("Deck %s has been deleted\n/flashcards/decks/update success\n", payload.DeckName)
 		fmt.Println("Update decks request handled successfully")
 		return
-	}
-
-	if r.Method == http.MethodPost {
+	case http.MethodPost:
 		err = db.CreateDeck(userID, payload.DeckName)
 		if err != nil {
 			if err == errDeckAlreadyExists {
@@ -151,10 +151,10 @@ func handleUpdateDecks(w http.ResponseWriter, r *http.Request, db *DatabaseManag
 		w.WriteHeader(http.StatusCreated)
 		log.Printf("Deck %s has been created\n/flashcards/decks/update success\n", payload.DeckName)
 	}
-
-	fmt.Println("Update decks request handled successfully")
 }
-func ChangeDeckNameHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
+
+// Didn't want to blend it in inside the previous function because they don't take the same data structure
+func changeDeckNameHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
 	log.Println("Connection to api/flashcards/decks/update from", r.RemoteAddr)
 	userID := r.Context().Value("userID").(int)
 
@@ -181,8 +181,41 @@ func ChangeDeckNameHandler(w http.ResponseWriter, r *http.Request, db *DatabaseM
 	w.WriteHeader(http.StatusOK)
 	log.Println("Put request handled successfully")
 }
-func addFlashcardHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
+func updateFlashcardsHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
 	fmt.Println("Connection to /flashcards/update from", r.RemoteAddr)
+	switch r.Method {
+	case http.MethodPost:
+		addFlashcardHandler(w, r, db)
+	case http.MethodPut:
+		fmt.Println("Handling edit flashcard")
+		var payload struct {
+			Deckname string
+			old      struct {
+				Front string
+				Back  string
+			}
+			new struct {
+				Front string
+				Back  string
+			}
+		}
+		err := json.NewDecoder(r.Body).Decode(&payload)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			log.Println(err)
+			return
+		}
+		userID := r.Context().Value("userID").(int)
+		err = db.EditFlashcard(userID, payload.Deckname, payload.old.Front, payload.old.Back, payload.new.Front, payload.new.Back)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		fmt.Printf("Flashcard {%s,%s} changed to {%s,%s}\n", payload.old.Front, payload.old.Back, payload.new.Front, payload.new.Back)
+	}
+
+}
+func addFlashcardHandler(w http.ResponseWriter, r *http.Request, db *DatabaseManager) {
 	fmt.Println("Handling add flashcard request")
 
 	userID := r.Context().Value("userID").(int)
@@ -320,11 +353,6 @@ func getDecksHander(w http.ResponseWriter, r *http.Request, db *DatabaseManager)
 	w.Write(response)
 	log.Println("/flashcards/decks success")
 	fmt.Println("Get decks request handled successfully")
-}
-
-// Generate a Random Session ID
-func generateSessionID() string {
-	return strconv.FormatInt(rand.Int63(), 16)
 }
 
 var store = sessions.NewCookieStore([]byte("your-secret-key"))

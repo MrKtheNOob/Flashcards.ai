@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "./Button";
 import CardEditor from "./CardEditor";
-import { Flashcard, updateFlashcards } from "../APIMethods";
+import { EditFlashcard, Flashcard} from "../APIMethods";
 import Alert from "./Alert";
 import "../styles/App.css";
 interface CardProps {
@@ -24,11 +24,8 @@ export default function Card({
   onDelete,
 }: CardProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [cardContent, setCardContent] = useState({ front, back });
+  const [cardContent, setCardContent] = useState<Flashcard>({ Front:front,Back:back });
   const [confirmDeleteState, setConfirmDeleteState] = useState<boolean>(false);
-  if (!withEditButtons) {
-    withEditButtons = true;
-  }
   if (typeof hoverEffect === "undefined") hoverEffect = false;
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -40,11 +37,12 @@ export default function Card({
     if (front === "" || back === "") {
       return;
     }
-    updateFlashcards({
-      deckname: deckname,
-      flashcard: { Front: front, Back: back },
+    EditFlashcard({
+      Deckname: deckname??"",
+      old: { Front: cardContent.Front, Back: cardContent.Back },
+      new:{Front:front,Back:back}
     });
-    setCardContent({ front, back });
+    setCardContent({ Front:front,Back: back });
   };
   return (
     <>
@@ -66,7 +64,7 @@ export default function Card({
               textContent="yes"
               type="red"
               onClick={() => {
-                onDelete({ Front: cardContent.front, Back: cardContent.back });
+                onDelete({ Front: cardContent.Front, Back: cardContent.Back });
                 setConfirmDeleteState(false);
               }}
             />
@@ -97,8 +95,8 @@ export default function Card({
       ) : (
         <div className="card">
           <div className="card-body" style={{ paddingBottom: "50px" }}>
-            <h5 className="card-title">{cardContent.front}</h5>
-            <p className="card-text">{cardContent.back}</p>
+            <h5 className="card-title">{cardContent.Front}</h5>
+            <p className="card-text">{cardContent.Back}</p>
             {withEditButtons && (
               <div className="edit-btns">
                 <Button

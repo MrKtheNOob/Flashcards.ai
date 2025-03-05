@@ -77,14 +77,13 @@ export default function Menu() {
         window.location.reload()
       }
     });
-
-    //setFlashcardData(
-      //   flashcardData.filter(
-      //     (flashcard: Flashcard) =>
-      //       flashcard.Front !== flashcardToRemove.Front &&
-      //       flashcard.Back !== flashcardToRemove.Back
-      //   )
-      // );
+    setFlashcardData(
+        flashcardData.filter(
+          (flashcard: Flashcard) =>
+            flashcard.Front !== flashcardToRemove.Front &&
+            flashcard.Back !== flashcardToRemove.Back
+        )
+      );
   }, [flashcardData, id]);
 
   const mapFlashcards = useCallback(() => {
@@ -93,6 +92,7 @@ export default function Menu() {
         key={index} // Assuming each flashcard has a unique id
         front={flashcard.Front}
         back={flashcard.Back}
+        withEditButtons={true}
         deckname={String(id)}
         onChange={handleEditedCard}
         onDelete={handleDeleteCard}
