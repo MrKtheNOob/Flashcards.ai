@@ -31,9 +31,9 @@ export default function FlipCard({ front, back, onChange }: FlipCardProps) {
       element.classList.add("slide-in");
       setTimeout(() => {
         element.classList.remove("slide-in");
-      }, 1000);
+      }, 400);
       onChange(true);
-    }, 0);
+    }, 400);
   }
   const handleSlideNext = () => {
     if (element) {

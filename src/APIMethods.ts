@@ -22,7 +22,7 @@ export type RegisterPayload = {
   password: string;
   cpassword: string;
 };
-const UrlPrefix = "";
+const UrlPrefix = "http://10.14.7.127:8080";
 export async function fetchFlashcards(
   deckname: string
 ): Promise<Result<Flashcard[]>> {
