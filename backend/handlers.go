@@ -46,7 +46,7 @@ func GetFormatedResponse(resp *genai.GenerateContentResponse) string {
 }
 func prompt(input string) (string, error) {
 	ctx := context.Background()
-	client, err := genai.NewClient(ctx, option.WithAPIKey("AIzaSyAj4IBGWwyp_wsjdueKY4ssuvTpu_ylS5s"))
+	client, err := genai.NewClient(ctx, option.WithAPIKey(""))
 	if err != nil {
 		return "", err
 	}
