@@ -22,7 +22,7 @@ export type RegisterPayload = {
   password: string;
   cpassword: string;
 };
-const UrlPrefix = "http://10.14.7.127:8080";
+const UrlPrefix = "";
 export async function fetchFlashcards(
   deckname: string
 ): Promise<Result<Flashcard[]>> {
@@ -39,7 +39,7 @@ export async function fetchFlashcards(
     case 401:
       return { data: null, error: new Error("go back to auth") };
     default:
-      return {
+      throw {
         data: null,
         error: new Error(
           `HTTP error: ${response.status} ${response.statusText}`
@@ -250,7 +250,7 @@ export async function promptRequest(
     return { data: null, error: err };
   }
   const result = (await response.json()) as Flashcard[];
-  console.log(result);
+  
   return { data: result, error: null };
 }
 

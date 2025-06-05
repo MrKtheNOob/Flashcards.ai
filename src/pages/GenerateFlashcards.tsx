@@ -32,10 +32,10 @@ export default function GenerateFlashcards() {
       }
       setLoading(false);  
     });
-    
   };
   function handleOnCreated(): void {
     setSaveWindow(false)
+    navigate("/decks");
   }
 
   return (

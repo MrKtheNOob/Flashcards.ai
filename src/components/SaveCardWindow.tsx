@@ -16,30 +16,29 @@ import {
 } from "../APIMethods";
 import AddDeck from "./AddDeck";
 import Alert from "./Alert";
-
+import Loading from "./Loading";
 
 interface SaveCardWindowProps {
   newCards: Flashcard[];
   onCreatedDeck: () => void;
 }
-export default function SaveCardWindow({
-  newCards,
-  onCreatedDeck,
-}: SaveCardWindowProps) {
+export default function SaveCardWindow({newCards,onCreatedDeck}: SaveCardWindowProps) {
   const [decks, setDecks] = useState<ReactNode>();
   const [addingDeck, setAddingDeck] = useState<boolean>(false);
+  const [loading,setLoading]=useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null);
   const handleSelectDeck = useCallback(
-    (deckname: string) => {
+      (deckname: string) => {
       const payload = newCards.map((flashcard) => {
         return { deckname: deckname, flashcard: flashcard };
       });
+      setLoading(true)//put it here to avoid unknow undefined behavior if put at the beginning
       updateMultipleFlashcards(payload).then((response) => {
         if (response) {
           alert(response);
         } else {
           alert(`Flashcards enregistrées dans le set nommé ${deckname}`);
-          window.location.href="/decks"
+          window.location.href = "/decks";
         }
       });
     },
@@ -49,32 +48,24 @@ export default function SaveCardWindow({
   useEffect(() => {
     //return a dialog box with the decks to choose from in order to save the cards there
     fetchDecks().then((response) => {
-      const decksPlusAddBtn = (
+      const selectableDecks = (
         <>
-          <div
-            style={{ display: "flex", gap: "10px", justifyContent: "center" }}
-          >
-            {response.data?.map((deckname) => {
-              return (
-                <Button
-                  textContent={deckname}
-                  onClick={() => {
-                    handleSelectDeck(deckname);
-                  }}
-                />
-              );
-            })}
-          </div>
-          <AddDeck
-            onClick={() => {
-              setAddingDeck(true);
-            }}
-          />
+          {response.data?.map((deckname, index) => {
+            return (
+              <Button
+                key={index}
+                textContent={deckname}
+                onClick={() => {
+                  handleSelectDeck(deckname);
+                }}
+              />
+            );
+          })}
         </>
       );
-      setDecks(decksPlusAddBtn);
+      setDecks(selectableDecks);
     });
-  }, [handleSelectDeck,addingDeck]);
+  }, [handleSelectDeck, addingDeck]);
   const handleCreateDeck = () => {
     const inputValue = inputRef.current?.value;
     if (!inputValue) {
@@ -82,20 +73,28 @@ export default function SaveCardWindow({
       alert("Deck name cannot be empty");
       return;
     }
-    //This function name is confusing 
-    updateFlashcards({ Deckname: inputValue ?? "" }).then((response) => {
-      if (response) {
-        alert(response);
-      } else {
-        onCreatedDeck();
-        alert("Set créé");
-      }
-    }).then(()=>{
-      const cardsToAdd:UpdatePayload[]=newCards.map((newCard)=>{
-        return {deckname:inputValue??"",flashcard:{Front:newCard.Front,Back:newCard.Back} as Flashcard}
+    setLoading(true);
+    //This function name is confusing
+    updateFlashcards({ Deckname: inputValue ?? "" })
+      .then((response) => {
+        if (response) {
+          alert(response);
+        } else {
+          onCreatedDeck();
+        }
       })
-      updateMultipleFlashcards(cardsToAdd)
-    });
+      .then(() => {
+        const cardsToAdd: UpdatePayload[] = newCards.map((newCard) => {
+          return {
+            deckname: inputValue ?? "",
+            flashcard: {
+              Front: newCard.Front,
+              Back: newCard.Back,
+            } as Flashcard,
+          };
+        });
+        updateMultipleFlashcards(cardsToAdd);
+      });
   };
 
   const returnIcon = useMemo(() => {
@@ -115,45 +114,65 @@ export default function SaveCardWindow({
       </svg>
     );
   }, []);
+  const saveToExistingDeckMenu = (
+    <>
+      <h1 style={{ color: "black" }}>
+        Choisissez dans quel Set enregistrer les nouvelles flashcards
+      </h1>
+      <br />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          height: "fit-content",
+          flexWrap: "wrap",
+          gap: "10px",
+          alignContent: "center",
+        }}
+      >
+        {decks}
+        <AddDeck
+          onClick={() => {
+            setAddingDeck(true);
+          }}
+          style={{ flexBasis: "100%" }}
+        />
+        {/*flex basis 100% makes the add deck button take the entire space in the backrank of the div*/}
+      </div>
+    </>
+  );
+  const createDeckMenu = (
+    <>
+      <h1 style={{ color: "black" }}>Ajouter un nouveau Set</h1>
+      <input
+        style={{ margin: "2em" }}
+        ref={inputRef}
+        type="text"
+        placeholder="Entrer le nom du nouveau Set "
+      />
+      <br />
+      <br />
+      <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+        <Button textContent="Créer" onClick={handleCreateDeck} />
+        <Button
+          onClick={() => {
+            setAddingDeck(false);
+          }}
+        >
+          Annuler {returnIcon}
+        </Button>
+      </div>
+    </>
+  );
   return (
     <Alert>
       {/* when the add deck button is pressed ,everything in the alert is removed 
         to be replaced by the input and the submit button and also a return button to go back to the previous state*/}
       {/* I want a sliding animation between the 2 menus in the alert */}
       <div className="select-decks">
-        {addingDeck ? (
-          <>
-            <h1 style={{color:"black"}}>Add new deck</h1>
-            <input
-              style={{ margin: "2em" }}
-              ref={inputRef}
-              type="text"
-              placeholder="Enter new deck name"
-            />
-            <br />
-            <br />
-            <br />
-            <div style={{ display: "flex", justifyContent: "center" ,gap:"10px"}}>
-              <Button textContent="Create" onClick={handleCreateDeck} />
-              <Button
-                onClick={() => {
-                  setAddingDeck(false);
-                }}
-              >
-                Return{returnIcon}
-              </Button>
-            </div>
-          </>
-        ) : (
-          <>
-            <h1 style={{color:"black"}}>Choisissez dans quel Set enregistrer les nouvelles flashcards</h1>
-            <br />
-            <div className="d-flex flex-wrap d-sm-grid d-md-grid d-lg-grid grid-cols-2 grid-cols-md-3 grid-cols-lg-4">
-              {decks}
-            </div>
-            
-          </>
-        )}
+        {
+          loading ?<Loading type={"circle"}/>:addingDeck ? <>{createDeckMenu}</> : <>{saveToExistingDeckMenu}</>
+        }
       </div>
     </Alert>
   );

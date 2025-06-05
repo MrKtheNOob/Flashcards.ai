@@ -42,9 +42,14 @@ type Log struct {
 
 const (
 	flashcardsFilePath = "./FlashcardData.json"
-	promptPrefix       = "Generate educational flashcards in french from the following content. Each flashcard should include:A 'front' field with a question summarizing a key concept.A 'back' field with a concise explanation or definition answering the question.Output the flashcards as a JSON array, with each flashcard as an object containing the 'front' and 'back' attributes. Use clear, factual language and keep the responses concise . Here is the content to process:"
-	logsFilePath       = "./prompt_logs.json"
-	allowedOrigin      = "http://10.14.7.127:5173"
+	promptPrefix       = `	Generate educational flashcards in french from the following content. 
+							Each flashcard should include:A field called 'Front' with a question summarizing a key concept.
+							Another field called 'Back' with a concise explanation or definition answering the question.
+							Output the flashcards as a JSON array, with each flashcard as an object containing the 'Front' 
+							and 'Back' attributes. Use clear, factual language and keep the responses concise .
+							Here is the content to process:`
+	logsFilePath  = "./prompt_logs.json"
+	allowedOrigin = "http://192.168.18.6:5173"
 )
 
 func main() {
@@ -61,13 +66,14 @@ func main() {
 		MaxAge:   3600, //seconds
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
+		Secure:   false,
 	}
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
-	if err := http.ListenAndServe("0.0.0.0:"+port, router); err != nil {
+	if err := http.ListenAndServe("192.168.18.6:"+port, router); err != nil {
 		panic(err)
 	}
 }

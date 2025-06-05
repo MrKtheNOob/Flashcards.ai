@@ -15,10 +15,8 @@ export default function Deck({ title, onDelete }: DeckProps) {
   const btnref = useRef<HTMLButtonElement>(null);
   const deckNameRef = useRef<HTMLHeadingElement>(null);
 
-
   const handleChangeDeckname = (newDeckName: string) => {
     setLoading(true)
-
     changeDeckNameRequest(title, newDeckName)
       .then(error => {
         if (!error) {
@@ -77,7 +75,7 @@ export default function Deck({ title, onDelete }: DeckProps) {
                   className="btn btn-danger"
                   onClick={(event) => {
                     event.stopPropagation()
-                    if (confirm("Do you want to delete this deck?")) {
+                    if (confirm("Voulez vous supprimer ce Set?")) {
                       deleteDeck(title)
                       if (onDelete) onDelete().then(() => {
                         alert("Set supprimé")

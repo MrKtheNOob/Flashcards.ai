@@ -77,7 +77,7 @@ const renderFlipCard = useMemo(() => {
 }, [loading,flashcards,ChangeCard,count])
 
 return (
-  <>
+  <>  
     <Header selectedPage="decks" />
     <ParticlesComponent />
     <h2 className="text-center" style={{ color: "white", fontSize: "1em", margin: "30px" }}>Maîtrisez les concepts en feuilletant des flashcards : testez vos connaissances, renforcez votre mémoire et suivez vos progrès une carte à la fois !</h2>

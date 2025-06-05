@@ -8,7 +8,6 @@ export default function Alert({ children, onClose }: AlertProps) {
   const [showed, changeShow] = useState(true);
   const elementRef = useRef<HTMLDivElement | null>(null);
   const backgroundRef=useRef<HTMLDivElement | null>(null);
-  //I don't entirelly understand the useEffect function but it changes the background when the alert is closed 
   useEffect(() => {
     document.body.style.backgroundColor = showed ? "gray" : "white";
     return () => {

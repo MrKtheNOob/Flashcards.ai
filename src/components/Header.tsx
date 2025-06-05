@@ -1,7 +1,6 @@
 // import { useRef } from "react";
 import { Link } from "react-router-dom";
 import "../header.css";
-
 interface HeaderProps {
   selectedPage: "home" | "decks" | "404" | "feedback";
 }
@@ -14,6 +13,7 @@ export default function Header({ selectedPage }: HeaderProps) {
             MetaFlashcards
             <span style={{ fontSize: "20px", color: "blue",position:"absolute" }}>Beta</span>
           </Link>
+          
         </h1>
         <div className="navbar-content">
           <div style={{ display: "flex", gap: "1em" }}>

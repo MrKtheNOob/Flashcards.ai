@@ -72,7 +72,7 @@ func SetupRoutes(router *http.ServeMux, db *DatabaseManager) {
 	router.HandleFunc("OPTIONS /api/logout", Middleware(logoutHandler, db))
 
 	// Define the path to the frontend folder
-	frontendPath := "../dist"
+	frontendPath := "../../Production/frontend"
 
 	router.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir(filepath.Join(frontendPath, "assets")))))
 

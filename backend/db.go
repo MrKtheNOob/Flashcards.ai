@@ -28,7 +28,6 @@ var (
 // modify flashcard - Done in EditFlashcard method
 type DatabaseManager struct {
 	DB *sql.DB
-	// users map[string]string
 }
 
 func InitialiseDB(dsn string) (*DatabaseManager, error) {
@@ -128,7 +127,6 @@ func (db *DatabaseManager) CheckIfUserExists(userID int) (*User, error) {
 	return user, nil
 }
 func (db *DatabaseManager) GetUserByUsernameAndPassword(username string, password string) (*User, error) {
-
 	query := "SELECT id,username, password,created_at FROM Users WHERE username = ? AND password= ?"
 	row := db.DB.QueryRow(query, username, password)
 
@@ -184,7 +182,7 @@ func (db *DatabaseManager) DeleteDeck(deckname string, userID int) error {
 	if user == nil {
 		return errUserDoesNotExist
 	}
-	deleteDeckQuery := "DELETE FROM Decks WHERE user_id = ? AND name= ?"
+	deleteDeckQuery := "DELETE FROM Decks WHERE user_id = ? AND name = ? LIMIT 1"
 	_, err = db.DB.Exec(deleteDeckQuery, userID, deckname)
 	if err != nil {
 		return fmt.Errorf("%s %s", queryErrorPrefix, err.Error())

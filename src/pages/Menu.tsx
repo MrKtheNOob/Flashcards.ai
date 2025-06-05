@@ -23,9 +23,6 @@ export default function Menu() {
   const [cards, setCards] = useState<ReactNode[]>([]);
   const [loading, setLoading] = useState<boolean>(true)
   const navigate = useNavigate();
-  const HandlegoToAIPageButton = () => {
-    navigate("/flashcards/ai-generated  ");
-  };
   const update = (newFlashcard: Flashcard) => {
     updateFlashcards({ deckname: id, flashcard: newFlashcard }).then(
       (error) => {
@@ -112,14 +109,6 @@ export default function Menu() {
       {isEditing && <CardEditor textLabel="Add card" onSave={handleAddCard} />}
       <h1 className="text-center" style={{ color: "white" }}>{id} Flashcards</h1>
       <>
-        <div style={{ textAlign: "center" }} className={"other tools"}>
-          <Button
-            type="normal"
-            textContent="Creer Flashcards avec l'IA"
-            onClick={HandlegoToAIPageButton}
-          />
-
-        </div>
         {flashcardData.length > 0 && (
           <div className="to-exercice">
             <Button
